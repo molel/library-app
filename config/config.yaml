@@ -1,0 +1,14 @@
+# HTTP server configurations
+server:
+  port: 9000
+  readTimeout: 10
+  writeTimeout: 10
+  maxHeaderKilobytes: 1024
+
+# PostgreSQL database configurations
+db:
+  host: localhost
+  port: 5432
+  user: postgres
+  name: library-app
+  sslMode: disable
