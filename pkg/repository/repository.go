@@ -19,6 +19,7 @@ type Authorization interface {
 type Authors interface {
 	CreateAuthor(author entities.Author) (int, error)
 	GetAuthors() ([]entities.Author, error)
+	GetAuthorById(id int) (entities.Author, error)
 }
 
 type Repository struct {

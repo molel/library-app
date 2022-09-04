@@ -4,6 +4,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"library-app/entities"
 	"net/http"
+	"strconv"
 )
 
 func (h *Handler) createAuthor(ctx *gin.Context) {
@@ -27,4 +28,18 @@ func (h *Handler) getAuthors(ctx *gin.Context) {
 		return
 	}
 	ctx.JSON(http.StatusOK, authors)
+}
+
+func (h *Handler) getAuthorById(ctx *gin.Context) {
+	intId, err := strconv.Atoi(ctx.Param("id"))
+	if err != nil {
+		ErrorResponse(ctx, http.StatusBadRequest, err)
+		return
+	}
+	author, err := h.service.Authors.GetAuthorById(intId)
+	if err != nil {
+		ErrorResponse(ctx, http.StatusInternalServerError, err)
+		return
+	}
+	ctx.JSON(http.StatusOK, author)
 }

@@ -28,3 +28,11 @@ func (as *AuthorService) GetAuthors() ([]entities.Author, error) {
 	}
 	return authors, nil
 }
+
+func (as *AuthorService) GetAuthorById(id int) (entities.Author, error) {
+	author, err := as.repository.Authors.GetAuthorById(id)
+	if err != nil {
+		return entities.Author{}, err
+	}
+	return author, nil
+}

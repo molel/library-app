@@ -40,3 +40,12 @@ func (db *AuthorDB) GetAuthors() ([]entities.Author, error) {
 	}
 	return authors, nil
 }
+
+func (db *AuthorDB) GetAuthorById(id int) (entities.Author, error) {
+	var author entities.Author
+	query := fmt.Sprintf("SELECT author_id AS authorId, name, surname, description FROM %s WHERE author_id = $1", authorsTableName)
+	if err := db.Get(&author, query, id); err != nil {
+		return entities.Author{}, err
+	}
+	return author, nil
+}

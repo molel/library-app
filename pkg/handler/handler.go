@@ -26,6 +26,7 @@ func (h *Handler) Init() *gin.Engine {
 		{
 			authors.POST("/", h.createAuthor)
 			authors.GET("/", h.getAuthors)
+			authors.GET("/:id", h.getAuthorById)
 		}
 	}
 	return router
