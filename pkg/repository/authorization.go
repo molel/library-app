@@ -22,3 +22,10 @@ func (db *AuthDB) CreateUser(user entities.UserSignUp) (int, error) {
 	}
 	return userId, nil
 }
+
+func (db *AuthDB) GetUser(username, password string) (entities.User, error) {
+	var user entities.User
+	query := fmt.Sprintf("SELECT * FROM %s WHERE username = $1 AND password = $2;", usersTableName)
+	err := db.Get(&user, query, username, password)
+	return user, err
+}

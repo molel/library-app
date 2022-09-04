@@ -26,3 +26,8 @@ type UserSignUp struct {
 	Username string `json:"username" binding:"required"`
 	Password string `json:"password" binding:"required"`
 }
+
+type User struct {
+	User_Id int `json:"user_id"`
+	UserSignUp
+}

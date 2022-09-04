@@ -11,6 +11,7 @@ const (
 
 type Authorization interface {
 	CreateUser(up entities.UserSignUp) (int, error)
+	GetUser(username, password string) (entities.User, error)
 }
 
 type Repository struct {

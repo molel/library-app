@@ -7,6 +7,8 @@ import (
 
 type Authorization interface {
 	CreateUser(user entities.UserSignUp) (int, error)
+	GenerateToken(username, password string) (string, error)
+	ParseToken(accessToken string) (int, error)
 }
 
 type Service struct {
