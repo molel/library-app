@@ -15,8 +15,8 @@ func NewAuthDB(db *sqlx.DB) *AuthDB {
 }
 
 func (db *AuthDB) CreateUser(user entities.UserSignUp) (int, error) {
-	query := fmt.Sprintf("INSERT INTO %s(username, password) VALUES($1, $2) RETURNING user_id", usersTableName)
 	var userId int
+	query := fmt.Sprintf("INSERT INTO %s(username, password) VALUES($1, $2) RETURNING user_id", usersTableName)
 	if err := db.QueryRow(query, user.Username, user.Password).Scan(&userId); err != nil {
 		return -1, err
 	}

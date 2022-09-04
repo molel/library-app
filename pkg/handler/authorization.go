@@ -8,34 +8,28 @@ import (
 
 func (h *Handler) SignUp(ctx *gin.Context) {
 	var inputJSON entities.UserSignUp
-
 	if err := ctx.BindJSON(&inputJSON); err != nil {
-		ErrorResponse(ctx, err)
+		ErrorResponse(ctx, http.StatusBadRequest, err)
 		return
 	}
-
-	userId, err := h.service.Auth.CreateUser(inputJSON)
+	userId, err := h.service.Authorization.CreateUser(inputJSON)
 	if err != nil {
-		ErrorResponse(ctx, err)
+		ErrorResponse(ctx, http.StatusInternalServerError, err)
 		return
 	}
-
 	ctx.JSON(http.StatusOK, map[string]interface{}{"userId": userId})
 }
 
 func (h *Handler) SignIn(ctx *gin.Context) {
 	var inputJSON entities.UserSignUp
-
 	if err := ctx.BindJSON(&inputJSON); err != nil {
-		ErrorResponse(ctx, err)
+		ErrorResponse(ctx, http.StatusBadRequest, err)
 		return
 	}
-
-	token, err := h.service.Auth.GenerateToken(inputJSON.Username, inputJSON.Password)
+	token, err := h.service.Authorization.GenerateToken(inputJSON.Username, inputJSON.Password)
 	if err != nil {
-		ErrorResponse(ctx, err)
+		ErrorResponse(ctx, http.StatusInternalServerError, err)
 		return
 	}
-
 	ctx.JSON(http.StatusOK, map[string]interface{}{"token": token})
 }

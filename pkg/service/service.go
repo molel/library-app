@@ -11,10 +11,17 @@ type Authorization interface {
 	ParseToken(accessToken string) (int, error)
 }
 
+type Authors interface {
+	CreateAuthor(author entities.Author) (int, error)
+}
+
 type Service struct {
-	Auth Authorization
+	Authorization
+	Authors
 }
 
 func NewService(repository *repository.Repository) *Service {
-	return &Service{Auth: NewAuthService(repository)}
+	return &Service{
+		Authorization: NewAuthService(repository),
+		Authors:       NewAuthorService(repository)}
 }

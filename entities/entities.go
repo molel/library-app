@@ -28,6 +28,13 @@ type UserSignUp struct {
 }
 
 type User struct {
-	User_Id int `json:"user_id"`
+	User_Id int `json:"userId"`
 	UserSignUp
+}
+
+type Author struct {
+	AuthorId    int    `json:"authorId"`
+	Name        string `json:"name"`
+	Surname     string `json:"surname"`
+	Description string `json:"description"`
 }

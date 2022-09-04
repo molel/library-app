@@ -6,7 +6,8 @@ import (
 )
 
 const (
-	usersTableName = "users"
+	usersTableName   = "users"
+	authorsTableName = "authors"
 )
 
 type Authorization interface {
@@ -14,10 +15,17 @@ type Authorization interface {
 	GetUser(username, password string) (entities.User, error)
 }
 
+type Authors interface {
+	CreateAuthor(author entities.Author) (int, error)
+}
+
 type Repository struct {
-	Auth Authorization
+	Authorization
+	Authors
 }
 
 func NewRepository(db *sqlx.DB) *Repository {
-	return &Repository{Auth: NewAuthDB(db)}
+	return &Repository{
+		Authorization: NewAuthDB(db),
+		Authors:       NewAuthorDB(db)}
 }

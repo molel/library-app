@@ -22,7 +22,7 @@ type AuthService struct {
 
 type tokenClaims struct {
 	jwt.RegisteredClaims
-	UserId int `json:"user_id"`
+	UserId int `json:"userId"`
 }
 
 func NewAuthService(repository *repository.Repository) *AuthService {
@@ -31,7 +31,7 @@ func NewAuthService(repository *repository.Repository) *AuthService {
 
 func (as *AuthService) CreateUser(user entities.UserSignUp) (int, error) {
 	user.Password = Hash(user.Password)
-	userId, err := as.repository.Auth.CreateUser(user)
+	userId, err := as.repository.Authorization.CreateUser(user)
 	if err != nil {
 		return -1, err
 	}
@@ -39,7 +39,7 @@ func (as *AuthService) CreateUser(user entities.UserSignUp) (int, error) {
 }
 
 func (as *AuthService) GenerateToken(username, password string) (string, error) {
-	user, err := as.repository.Auth.GetUser(username, Hash(password))
+	user, err := as.repository.Authorization.GetUser(username, Hash(password))
 	if err != nil {
 		return "", err
 	}
@@ -64,7 +64,7 @@ func (as *AuthService) ParseToken(accessToken string) (int, error) {
 		return -1, err
 	}
 	claims, ok := token.Claims.(*tokenClaims)
-	if !ok || token.Valid {
+	if !ok {
 		return -1, errors.New("access token claims are not of type *tokenClaims")
 	}
 	return claims.UserId, nil
