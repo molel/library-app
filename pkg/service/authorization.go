@@ -39,7 +39,7 @@ func (as *AuthService) CreateUser(user entities.UserSignUp) (int, error) {
 }
 
 func (as *AuthService) GenerateToken(username, password string) (string, error) {
-	user, err := as.repository.Authorization.GetUser(username, Hash(password))
+	userId, err := as.repository.Authorization.GetUserId(username, Hash(password))
 	if err != nil {
 		return "", err
 	}
@@ -48,7 +48,7 @@ func (as *AuthService) GenerateToken(username, password string) (string, error) 
 		jwt.RegisteredClaims{
 			ExpiresAt: jwt.NewNumericDate(now.Add(tokenTimeLimit)),
 			IssuedAt:  jwt.NewNumericDate(now)},
-		user.User_Id})
+		userId})
 
 	return token.SignedString([]byte(signingKey))
 }

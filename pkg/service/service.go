@@ -13,6 +13,7 @@ type Authorization interface {
 
 type Authors interface {
 	CreateAuthor(author entities.Author) (int, error)
+	GetAuthors() ([]entities.Author, error)
 }
 
 type Service struct {

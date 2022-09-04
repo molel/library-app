@@ -25,6 +25,7 @@ func (h *Handler) Init() *gin.Engine {
 		authors := api.Group("/authors")
 		{
 			authors.POST("/", h.createAuthor)
+			authors.GET("/", h.getAuthors)
 		}
 	}
 	return router

@@ -19,3 +19,12 @@ func (h *Handler) createAuthor(ctx *gin.Context) {
 	}
 	ctx.JSON(http.StatusOK, map[string]interface{}{"authorId": authorId})
 }
+
+func (h *Handler) getAuthors(ctx *gin.Context) {
+	authors, err := h.service.Authors.GetAuthors()
+	if err != nil {
+		ErrorResponse(ctx, http.StatusInternalServerError, err)
+		return
+	}
+	ctx.JSON(http.StatusOK, authors)
+}

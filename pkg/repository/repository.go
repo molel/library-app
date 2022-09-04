@@ -13,10 +13,12 @@ const (
 type Authorization interface {
 	CreateUser(up entities.UserSignUp) (int, error)
 	GetUser(username, password string) (entities.User, error)
+	GetUserId(username, password string) (int, error)
 }
 
 type Authors interface {
 	CreateAuthor(author entities.Author) (int, error)
+	GetAuthors() ([]entities.Author, error)
 }
 
 type Repository struct {
