@@ -30,6 +30,18 @@ func (h *Handler) Init() *gin.Engine {
 			authors.PUT("/:id", h.updateAuthorById)
 			authors.DELETE("/:id", h.deleteAuthorById)
 		}
+		genres := api.Group("/genres")
+		{
+			genres.POST("/", h.createGenre)
+			genres.GET("/", h.getGenres)
+			genres.GET("/:id", h.getGenreById)
+			genres.PUT("/:id", h.UpdateGenreById)
+			genres.DELETE("/:id", h.deleteGenreById)
+		}
+		books := api.Group("/books")
+		{
+			books.POST("/", h.createBook)
+		}
 	}
 	return router
 }

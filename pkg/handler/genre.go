@@ -7,72 +7,70 @@ import (
 	"strconv"
 )
 
-func (h *Handler) createAuthor(ctx *gin.Context) {
-	var inputJSON entities.AuthorCreate
+func (h *Handler) createGenre(ctx *gin.Context) {
+	var inputJSON entities.GenreCreate
 	if err := ctx.BindJSON(&inputJSON); err != nil {
 		ErrorResponse(ctx, http.StatusBadRequest, err)
 		return
 	}
-	authorId, err := h.service.Authors.CreateAuthor(inputJSON)
+	genreId, err := h.service.Genres.CreateGenre(inputJSON)
 	if err != nil {
 		ErrorResponse(ctx, http.StatusInternalServerError, err)
 		return
 	}
-	ctx.JSON(http.StatusOK, map[string]interface{}{"authorId": authorId})
+	ctx.JSON(http.StatusOK, map[string]interface{}{"genreId": genreId})
 }
 
-func (h *Handler) getAuthors(ctx *gin.Context) {
-	authors, err := h.service.Authors.GetAuthors()
+func (h *Handler) getGenres(ctx *gin.Context) {
+	genres, err := h.service.Genres.GetGenres()
 	if err != nil {
 		ErrorResponse(ctx, http.StatusInternalServerError, err)
 		return
 	}
-	ctx.JSON(http.StatusOK, authors)
+	ctx.JSON(http.StatusOK, genres)
 }
 
-func (h *Handler) getAuthorById(ctx *gin.Context) {
+func (h *Handler) getGenreById(ctx *gin.Context) {
 	intId, err := strconv.Atoi(ctx.Param("id"))
 	if err != nil {
 		ErrorResponse(ctx, http.StatusBadRequest, err)
 		return
 	}
-	author, err := h.service.Authors.GetAuthorById(intId)
+	genre, err := h.service.Genres.GetGenreById(intId)
 	if err != nil {
 		ErrorResponse(ctx, http.StatusInternalServerError, err)
 		return
 	}
-	ctx.JSON(http.StatusOK, author)
+	ctx.JSON(http.StatusOK, genre)
 }
 
-func (h *Handler) updateAuthorById(ctx *gin.Context) {
-	var inputJSON entities.AuthorUpdate
+func (h *Handler) UpdateGenreById(ctx *gin.Context) {
+	var inputJSON entities.GenreUpdate
 	if err := ctx.BindJSON(&inputJSON); err != nil {
 		ErrorResponse(ctx, http.StatusBadRequest, err)
 		return
 	}
 	intId, err := strconv.Atoi(ctx.Param("id"))
 	if err != nil {
-		ErrorResponse(ctx, http.StatusBadRequest, err)
-		return
+		ErrorResponse(ctx, http.StatusInternalServerError, err)
 	}
-	err = h.service.Authors.UpdateAuthorById(intId, inputJSON)
+	err = h.service.Genres.UpdateGenreById(intId, inputJSON)
 	if err != nil {
 		ErrorResponse(ctx, http.StatusInternalServerError, err)
 		return
 	}
-	ctx.JSON(http.StatusOK, map[string]interface{}{"author_id": intId})
+	ctx.JSON(http.StatusOK, map[string]interface{}{"genreId": intId})
 }
 
-func (h *Handler) deleteAuthorById(ctx *gin.Context) {
+func (h *Handler) deleteGenreById(ctx *gin.Context) {
 	intId, err := strconv.Atoi(ctx.Param("id"))
 	if err != nil {
-		ErrorResponse(ctx, http.StatusBadRequest, err)
-		return
+		ErrorResponse(ctx, http.StatusInternalServerError, err)
 	}
-	err = h.service.Authors.DeleteAuthorById(intId)
+	err = h.service.Genres.DeleteGenreById(intId)
 	if err != nil {
 		ErrorResponse(ctx, http.StatusInternalServerError, err)
 		return
 	}
-	ctx.JSON(http.StatusOK, map[string]interface{}{"author_id": intId})
+	ctx.JSON(http.StatusOK, map[string]interface{}{"genreId": intId})
 }

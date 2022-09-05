@@ -33,9 +33,38 @@ type User struct {
 	UserSignUp
 }
 
-type Author struct {
-	AuthorId    int            `json:"authorId"`
+type AuthorCreate struct {
 	Name        string         `json:"name" binding:"required"`
 	Surname     string         `json:"surname" binding:"required"`
 	Description sql.NullString `json:"description"`
+}
+
+type AuthorUpdate struct {
+	AuthorId    int            `json:"authorId"`
+	Name        string         `json:"name"`
+	Surname     string         `json:"surname"`
+	Description sql.NullString `json:"description"`
+}
+
+type GenreCreate struct {
+	GenreId int    `json:"genreId" binding:"required"`
+	Name    string `json:"name" binding:"required"`
+}
+
+type GenreUpdate struct {
+	Name string `json:"name" binding:"required"`
+}
+
+type BookCreate struct {
+	Name        string `json:"name" binding:"required"`
+	Description string `json:"description"`
+	GenreId     int    `json:"genreId" binding:"required"`
+	AuthorId    int    `json:"authorId" binding:"required"`
+}
+
+type BookUpdate struct {
+	Name        string `json:"name"`
+	Description string `json:"description"`
+	GenreId     int    `json:"genreId"`
+	AuthorId    int    `json:"authorId"`
 }
