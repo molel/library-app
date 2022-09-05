@@ -41,7 +41,12 @@ func (h *Handler) Init() *gin.Engine {
 		books := api.Group("/books")
 		{
 			books.POST("/", h.createBook)
+			books.GET("/", h.getBooks)
+			books.GET("/:id", h.getBookById)
+			books.PUT("/:id", h.updateBookById)
+			books.DELETE("/:id", h.deleteBookById)
 		}
+		// TODO implement handlers for users' book list
 	}
 	return router
 }

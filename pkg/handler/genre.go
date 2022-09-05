@@ -53,6 +53,7 @@ func (h *Handler) UpdateGenreById(ctx *gin.Context) {
 	intId, err := strconv.Atoi(ctx.Param("id"))
 	if err != nil {
 		ErrorResponse(ctx, http.StatusInternalServerError, err)
+		return
 	}
 	err = h.service.Genres.UpdateGenreById(intId, inputJSON)
 	if err != nil {
@@ -66,6 +67,7 @@ func (h *Handler) deleteGenreById(ctx *gin.Context) {
 	intId, err := strconv.Atoi(ctx.Param("id"))
 	if err != nil {
 		ErrorResponse(ctx, http.StatusInternalServerError, err)
+		return
 	}
 	err = h.service.Genres.DeleteGenreById(intId)
 	if err != nil {

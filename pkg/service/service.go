@@ -29,6 +29,10 @@ type Genres interface {
 
 type Books interface {
 	CreateBook(book entities.BookCreate) (int, error)
+	GetBooks() ([]entities.BookUpdate, error)
+	GetBookById(id int) (entities.BookUpdate, error)
+	UpdateBookById(id int, book entities.BookUpdate) error
+	DeleteBookById(id int) error
 }
 
 type Service struct {

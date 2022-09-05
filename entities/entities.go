@@ -6,6 +6,7 @@ import (
 	"time"
 )
 
+// HTTPServerConfigs TODO give more convenient names for entities, check if structure tags are correct
 type HTTPServerConfigs struct {
 	Addr           string
 	Handler        http.Handler
@@ -56,15 +57,16 @@ type GenreUpdate struct {
 }
 
 type BookCreate struct {
-	Name        string `json:"name" binding:"required"`
-	Description string `json:"description"`
-	GenreId     int    `json:"genreId" binding:"required"`
-	AuthorId    int    `json:"authorId" binding:"required"`
+	Name        string         `json:"name" binding:"required"`
+	Description sql.NullString `json:"description"`
+	GenreId     int            `json:"genreId" binding:"required"`
+	AuthorId    int            `json:"authorId" binding:"required"`
 }
 
 type BookUpdate struct {
-	Name        string `json:"name"`
-	Description string `json:"description"`
-	GenreId     int    `json:"genreId"`
-	AuthorId    int    `json:"authorId"`
+	BookId      int            `json:"bookId"`
+	Name        string         `json:"name"`
+	Description sql.NullString `json:"description"`
+	GenreId     int            `json:"genreId"`
+	AuthorId    int            `json:"authorId"`
 }

@@ -36,6 +36,10 @@ type Genres interface {
 
 type Books interface {
 	CreateBook(book entities.BookCreate) (int, error)
+	GetBooks() ([]entities.BookUpdate, error)
+	GetBookById(id int) (entities.BookUpdate, error)
+	UpdateBookById(id int, book entities.BookUpdate) error
+	DeleteBookById(id int) error
 }
 
 type Repository struct {
@@ -45,6 +49,7 @@ type Repository struct {
 	Books
 }
 
+// NewRepository TODO implement handlers for error sql results
 func NewRepository(db *sqlx.DB) *Repository {
 	return &Repository{
 		Authorization: NewAuthDB(db),

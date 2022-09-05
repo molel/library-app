@@ -14,9 +14,21 @@ func NewBookService(repository *repository.Repository) *BookService {
 }
 
 func (bs *BookService) CreateBook(book entities.BookCreate) (int, error) {
-	bookId, err := bs.repository.Books.CreateBook(book)
-	if err != nil {
-		return -1, err
-	}
-	return bookId, nil
+	return bs.repository.Books.CreateBook(book)
+}
+
+func (bs *BookService) GetBooks() ([]entities.BookUpdate, error) {
+	return bs.repository.Books.GetBooks()
+}
+
+func (bs *BookService) GetBookById(id int) (entities.BookUpdate, error) {
+	return bs.repository.Books.GetBookById(id)
+}
+
+func (bs *BookService) UpdateBookById(id int, book entities.BookUpdate) error {
+	return bs.repository.Books.UpdateBookById(id, book)
+}
+
+func (bs *BookService) DeleteBookById(id int) error {
+	return bs.repository.Books.DeleteBookById(id)
 }
