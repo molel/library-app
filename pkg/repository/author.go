@@ -49,3 +49,15 @@ func (db *AuthorDB) GetAuthorById(id int) (entities.Author, error) {
 	}
 	return author, nil
 }
+
+func (db *AuthorDB) UpdateAuthorById(id int, author entities.Author) error {
+	query := fmt.Sprintf("UPDATE %s SET name = $2, surname = $3, description = $4 WHERE author_id = $1", authorsTableName)
+	_, err := db.Exec(query, id, author.Name, author.Surname, author.Description.String)
+	return err
+}
+
+func (db *AuthorDB) DeleteAuthorById(id int) error {
+	query := fmt.Sprintf("DELETE FROM %s WHERE author_id = $1", authorsTableName)
+	_, err := db.Exec(query, id)
+	return err
+}

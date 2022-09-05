@@ -43,3 +43,36 @@ func (h *Handler) getAuthorById(ctx *gin.Context) {
 	}
 	ctx.JSON(http.StatusOK, author)
 }
+
+func (h *Handler) updateAuthorById(ctx *gin.Context) {
+	var inputJSON entities.Author
+	if err := ctx.BindJSON(&inputJSON); err != nil {
+		ErrorResponse(ctx, http.StatusBadRequest, err)
+		return
+	}
+	intId, err := strconv.Atoi(ctx.Param("id"))
+	if err != nil {
+		ErrorResponse(ctx, http.StatusBadRequest, err)
+		return
+	}
+	err = h.service.Authors.UpdateAuthorById(intId, inputJSON)
+	if err != nil {
+		ErrorResponse(ctx, http.StatusInternalServerError, err)
+		return
+	}
+	ctx.JSON(http.StatusOK, map[string]interface{}{"author_id": intId})
+}
+
+func (h *Handler) deleteAuthorById(ctx *gin.Context) {
+	intId, err := strconv.Atoi(ctx.Param("id"))
+	if err != nil {
+		ErrorResponse(ctx, http.StatusBadRequest, err)
+		return
+	}
+	err = h.service.Authors.DeleteAuthorById(intId)
+	if err != nil {
+		ErrorResponse(ctx, http.StatusInternalServerError, err)
+		return
+	}
+	ctx.JSON(http.StatusOK, map[string]interface{}{"author_id": intId})
+}

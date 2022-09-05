@@ -36,3 +36,11 @@ func (as *AuthorService) GetAuthorById(id int) (entities.Author, error) {
 	}
 	return author, nil
 }
+
+func (as *AuthorService) UpdateAuthorById(id int, author entities.Author) error {
+	return as.repository.Authors.UpdateAuthorById(id, author)
+}
+
+func (as *AuthorService) DeleteAuthorById(id int) error {
+	return as.repository.Authors.DeleteAuthorById(id)
+}

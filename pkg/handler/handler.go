@@ -27,6 +27,8 @@ func (h *Handler) Init() *gin.Engine {
 			authors.POST("/", h.createAuthor)
 			authors.GET("/", h.getAuthors)
 			authors.GET("/:id", h.getAuthorById)
+			authors.PUT("/:id", h.updateAuthorById)
+			authors.DELETE("/:id", h.deleteAuthorById)
 		}
 	}
 	return router

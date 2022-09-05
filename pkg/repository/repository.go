@@ -20,6 +20,8 @@ type Authors interface {
 	CreateAuthor(author entities.Author) (int, error)
 	GetAuthors() ([]entities.Author, error)
 	GetAuthorById(id int) (entities.Author, error)
+	UpdateAuthorById(id int, author entities.Author) error
+	DeleteAuthorById(id int) error
 }
 
 type Repository struct {
