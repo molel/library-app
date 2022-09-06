@@ -1,6 +1,7 @@
 package repository
 
 import (
+	"errors"
 	"fmt"
 	"github.com/jmoiron/sqlx"
 	"library-app/entities"
@@ -24,10 +25,14 @@ func (db *AuthDB) CreateUser(user entities.UserSignUp) (int, error) {
 }
 
 func (db *AuthDB) GetUserId(username, password string) (int, error) {
-	var userId int
-	query := fmt.Sprintf("SELECT user_id FROM %s WHERE username = $1 AND password = $2;", usersTableName)
-	err := db.QueryRow(query, username, password).Scan(&userId)
-	return userId, err
+	if exist := db.Exist(username); exist {
+		var userId int
+		query := fmt.Sprintf("SELECT user_id FROM %s WHERE username = $1 AND password = $2;", usersTableName)
+		err := db.QueryRow(query, username, password).Scan(&userId)
+		return userId, err
+	} else {
+		return -1, errors.New("there is no users with such username")
+	}
 }
 
 func (db *AuthDB) GetUser(username, password string) (entities.User, error) {
@@ -35,4 +40,13 @@ func (db *AuthDB) GetUser(username, password string) (entities.User, error) {
 	query := fmt.Sprintf("SELECT * FROM %s WHERE username = $1 AND password = $2;", usersTableName)
 	err := db.Get(&user, query, username, password)
 	return user, err
+}
+
+func (db *AuthDB) Exist(username string) bool {
+	var exist bool
+	query := "SELECT EXISTS(SELECT 1 FROM users WHERE username = $1)"
+	if err := db.QueryRow(query, username).Scan(&exist); err != nil {
+		return false
+	}
+	return exist
 }

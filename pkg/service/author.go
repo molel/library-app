@@ -14,27 +14,15 @@ func NewAuthorService(repository *repository.Repository) *AuthorService {
 }
 
 func (as *AuthorService) CreateAuthor(author entities.AuthorCreate) (int, error) {
-	authorId, err := as.repository.CreateAuthor(author)
-	if err != nil {
-		return -1, err
-	}
-	return authorId, nil
+	return as.repository.CreateAuthor(author)
 }
 
 func (as *AuthorService) GetAuthors() ([]entities.AuthorUpdate, error) {
-	authors, err := as.repository.GetAuthors()
-	if err != nil {
-		return nil, err
-	}
-	return authors, nil
+	return as.repository.GetAuthors()
 }
 
-func (as *AuthorService) GetAuthorById(id int) (entities.AuthorCreate, error) {
-	author, err := as.repository.Authors.GetAuthorById(id)
-	if err != nil {
-		return entities.AuthorCreate{}, err
-	}
-	return author, nil
+func (as *AuthorService) GetAuthorById(id int) (entities.AuthorUpdate, error) {
+	return as.repository.Authors.GetAuthorById(id)
 }
 
 func (as *AuthorService) UpdateAuthorById(id int, author entities.AuthorUpdate) error {

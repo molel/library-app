@@ -21,7 +21,7 @@ type Authorization interface {
 type Authors interface {
 	CreateAuthor(author entities.AuthorCreate) (int, error)
 	GetAuthors() ([]entities.AuthorUpdate, error)
-	GetAuthorById(id int) (entities.AuthorCreate, error)
+	GetAuthorById(id int) (entities.AuthorUpdate, error)
 	UpdateAuthorById(id int, author entities.AuthorUpdate) error
 	DeleteAuthorById(id int) error
 }
@@ -49,7 +49,6 @@ type Repository struct {
 	Books
 }
 
-// NewRepository TODO implement handlers for error sql results
 func NewRepository(db *sqlx.DB) *Repository {
 	return &Repository{
 		Authorization: NewAuthDB(db),

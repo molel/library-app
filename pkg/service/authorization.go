@@ -31,11 +31,7 @@ func NewAuthService(repository *repository.Repository) *AuthService {
 
 func (as *AuthService) CreateUser(user entities.UserSignUp) (int, error) {
 	user.Password = Hash(user.Password)
-	userId, err := as.repository.Authorization.CreateUser(user)
-	if err != nil {
-		return -1, err
-	}
-	return userId, nil
+	return as.repository.Authorization.CreateUser(user)
 }
 
 func (as *AuthService) GenerateToken(username, password string) (string, error) {
