@@ -1,55 +1,39 @@
 # library-app
-Сервер для обработки данных в системе хранения книг библиотеки
 
-***
+The project is a restful api service designed for a library management system
 
-Для запуска используется следующие команды:
+## Installing / Getting started
+
+```shell
+cd path_to_project
+go build ./cmd/main.go
+main
 ```
-> go build path_to_project/cmd/main.go
 
-> main
+## Developing
+
+### Built With
+
+The project uses **Gin Web Framework**, **PostgreSQL Server**, **pq** as postgres driver, **sqlx** as an extension of
+sql package from golang standard library, **jwt-go** as golang implementation of JSON Web Tokens, **GoDotEnv** and **
+Viper**
+
+### Setting up Dev
+
+Here's a brief intro about what a developer must do in order to start developing
+the project further:
+
+```shell
+git clone https://github.com/molel/library-app
+cd path_to_project
+go mod download
 ```
 
-***
+## Configuration
 
-## API (в плане):
+Before the start it would be good practice to set up configurations in config file. At this moment server and database
+port and other minor settings can be configured.
 
-`POST auth/sign-up`
-Регистрация пользователей в системе
+## Api Reference
 
-`POST auth/sign-in`
-Авторизация пользователей в системе
-
-`GET api/books/`
-Получение всех сущностей книг
-
-`GET api/books/id`
-Получение сущности книги по ее id
-
-`GET api/books/author-id`
-Получение сущности книги по id сущности ее автора
-
-`POST api/books/`
-Добавление сущности книги
-
-`PUT api/books/id`
-Изменение сущности книги по ее id
-
-`DELETE api/books/id`
-Удаление сущности книги по ее id
-
-`GET api/authors/`
-Получение всех сущностей авторов
-
-`GET api/authors/id`
-Получение сущности автора по ее id
-
-`POST api/authors/`
-Добавление сущности автора
-
-`PUT api/authors/id`
-Изменение сущности автора по ее id
-
-`DELETE api/authors/id`
-Удаление сущности автора по ее id
-
+In development

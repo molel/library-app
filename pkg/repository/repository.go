@@ -10,10 +10,11 @@ import (
 )
 
 const (
-	usersTableName   = "users"
-	authorsTableName = "authors"
-	genresTableName  = "genres"
-	booksTableName   = "books"
+	usersTableName               = "users"
+	authorsTableName             = "authors"
+	genresTableName              = "genres"
+	booksTableName               = "books"
+	usersBooksListItemsTableName = "users_books_list_items"
 )
 
 type Authorization interface {

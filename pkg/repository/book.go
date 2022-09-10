@@ -75,6 +75,9 @@ func (db *BookDB) DeleteBookById(id int) error {
 	if exist := Exists(db.DB, booksTableName, "id", id); !exist {
 		return errors.New("there is no books with such id")
 	}
+	if exist := Exists(db.DB, usersBooksListItemsTableName, "book_id", id); exist {
+		return errors.New("cannot delete book: book has 1 or more dependencies")
+	}
 	query := fmt.Sprintf("DELETE FROM %s WHERE id = $1", booksTableName)
 	_, err := db.Exec(query, id)
 	return err
