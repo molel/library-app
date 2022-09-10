@@ -24,46 +24,59 @@ type DatabaseConfigs struct {
 	SSLMode  string
 }
 
-type UserSignUp struct {
+type UserCreate struct {
 	Username string `json:"username" binding:"required"`
 	Password string `json:"password" binding:"required"`
 }
 
-type User struct {
+type UserGet struct {
 	UserId int `json:"userId"`
-	UserSignUp
+	UserCreate
 }
 
 type AuthorCreate struct {
-	Name        string         `json:"name" binding:"required"`
-	Surname     string         `json:"surname" binding:"required"`
-	Description sql.NullString `json:"description"`
+	Name        *string `json:"name" binding:"required"`
+	Surname     *string `json:"surname" binding:"required"`
+	Description *string `json:"description"`
 }
 
 type AuthorUpdate struct {
+	Name        *string `json:"name"`
+	Surname     *string `json:"surname"`
+	Description *string `json:"description"`
+}
+
+type AuthorGet struct {
 	AuthorId    int            `json:"authorId"`
 	Name        string         `json:"name"`
 	Surname     string         `json:"surname"`
 	Description sql.NullString `json:"description"`
 }
 
-type GenreCreate struct {
+type GenreCreateAndGet struct {
 	GenreId int    `json:"genreId" binding:"required"`
 	Name    string `json:"name" binding:"required"`
 }
 
 type GenreUpdate struct {
-	Name string `json:"name" binding:"required"`
+	Name *string `json:"name"`
 }
 
 type BookCreate struct {
-	Name        string         `json:"name" binding:"required"`
-	Description sql.NullString `json:"description"`
-	GenreId     int            `json:"genreId" binding:"required"`
-	AuthorId    int            `json:"authorId" binding:"required"`
+	Name        string `json:"name" binding:"required"`
+	Description string `json:"description"`
+	GenreId     int    `json:"genreId" binding:"required"`
+	AuthorId    int    `json:"authorId" binding:"required"`
 }
 
 type BookUpdate struct {
+	Name        *string `json:"name"`
+	Description *string `json:"description"`
+	GenreId     *int    `json:"genreId"`
+	AuthorId    *int    `json:"authorId"`
+}
+
+type BookGet struct {
 	BookId      int            `json:"bookId"`
 	Name        string         `json:"name"`
 	Description sql.NullString `json:"description"`

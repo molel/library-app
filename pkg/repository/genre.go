@@ -15,7 +15,7 @@ func NewGenreDB(db *sqlx.DB) *GenreDB {
 	return &GenreDB{db}
 }
 
-func (db *GenreDB) CreateGenre(genre entities.GenreCreate) (int, error) {
+func (db *GenreDB) CreateGenre(genre entities.GenreCreateAndGet) (int, error) {
 	var genreId int
 	query := fmt.Sprintf("INSERT INTO %s(genre_id, name) VALUES($1, $2) RETURNING genre_id", genresTableName)
 	if err := db.QueryRow(query, genre.GenreId, genre.Name).Scan(&genreId); err != nil {
@@ -24,9 +24,9 @@ func (db *GenreDB) CreateGenre(genre entities.GenreCreate) (int, error) {
 	return genreId, nil
 }
 
-func (db *GenreDB) GetGenres() ([]entities.GenreCreate, error) {
-	var genre entities.GenreCreate
-	genres := make([]entities.GenreCreate, 0)
+func (db *GenreDB) GetGenres() ([]entities.GenreCreateAndGet, error) {
+	var genre entities.GenreCreateAndGet
+	genres := make([]entities.GenreCreateAndGet, 0)
 	query := fmt.Sprintf("SELECT genre_id AS genreId, name FROM %s", genresTableName)
 	rows, err := db.Queryx(query)
 	if err != nil {
@@ -45,44 +45,38 @@ func (db *GenreDB) GetGenres() ([]entities.GenreCreate, error) {
 	return genres, nil
 }
 
-func (db *GenreDB) GetGenreById(id int) (entities.GenreCreate, error) {
-	if exist := db.Exist(id); exist {
-		var genre entities.GenreCreate
-		query := fmt.Sprintf("SELECT genre_id AS genreId, name FROM %s WHERE genre_id = $1", genresTableName)
-		if err := db.Get(&genre, query, id); err != nil {
-			return entities.GenreCreate{}, err
-		}
-		return genre, nil
-	} else {
-		return entities.GenreCreate{}, errors.New("there is no genres with such id")
+func (db *GenreDB) GetGenreById(id int) (entities.GenreCreateAndGet, error) {
+	if exist := Exists(db.DB, genresTableName, "genre_id", id); !exist {
+		return entities.GenreCreateAndGet{}, errors.New("there is no genres with such id")
 	}
+	var genre entities.GenreCreateAndGet
+	query := fmt.Sprintf("SELECT genre_id AS genreId, name FROM %s WHERE genre_id = $1", genresTableName)
+	if err := db.Get(&genre, query, id); err != nil {
+		return entities.GenreCreateAndGet{}, err
+	}
+	return genre, nil
 }
 
 func (db *GenreDB) UpdateGenreById(id int, genre entities.GenreUpdate) error {
-	if exist := db.Exist(id); exist {
-		query := fmt.Sprintf("UPDATE %s SET name = $2 WHERE genre_id = $1", genresTableName)
-		_, err := db.Exec(query, id, genre.Name)
-		return err
-	} else {
+	if exist := Exists(db.DB, genresTableName, "genre_id", id); !exist {
 		return errors.New("there is no genres with such id")
 	}
+	fields, values, err := getUpdateArgs(genre)
+	if err != nil {
+		return err
+	}
+	values = append(values, id)
+	query := fmt.Sprintf("UPDATE %s SET %s WHERE genre_id = $%d", genresTableName, fields, len(values))
+	_, err = db.Exec(query, values...)
+	return err
+
 }
 
 func (db *GenreDB) DeleteGenreById(id int) error {
-	if exist := db.Exist(id); exist {
-		query := fmt.Sprintf("DELETE FROM %s WHERE genre_id = $1", genresTableName)
-		_, err := db.Exec(query, id)
-		return err
-	} else {
+	if exist := Exists(db.DB, genresTableName, "genre_id", id); !exist {
 		return errors.New("there is no genres with such id")
 	}
-}
-
-func (db *GenreDB) Exist(id int) bool {
-	var exist bool
-	query := "SELECT EXISTS(SELECT 1 FROM genres WHERE genre_id = $1)"
-	if err := db.QueryRow(query, id).Scan(&exist); err != nil {
-		return false
-	}
-	return exist
+	query := fmt.Sprintf("DELETE FROM %s WHERE genre_id = $1", genresTableName)
+	_, err := db.Exec(query, id)
+	return err
 }

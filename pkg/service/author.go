@@ -17,11 +17,11 @@ func (as *AuthorService) CreateAuthor(author entities.AuthorCreate) (int, error)
 	return as.repository.CreateAuthor(author)
 }
 
-func (as *AuthorService) GetAuthors() ([]entities.AuthorUpdate, error) {
+func (as *AuthorService) GetAuthors() ([]entities.AuthorGet, error) {
 	return as.repository.GetAuthors()
 }
 
-func (as *AuthorService) GetAuthorById(id int) (entities.AuthorUpdate, error) {
+func (as *AuthorService) GetAuthorById(id int) (entities.AuthorGet, error) {
 	return as.repository.Authors.GetAuthorById(id)
 }
 

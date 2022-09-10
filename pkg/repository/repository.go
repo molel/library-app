@@ -1,8 +1,12 @@
 package repository
 
 import (
+	"errors"
+	"fmt"
 	"github.com/jmoiron/sqlx"
 	"library-app/entities"
+	"reflect"
+	"strings"
 )
 
 const (
@@ -13,31 +17,31 @@ const (
 )
 
 type Authorization interface {
-	CreateUser(up entities.UserSignUp) (int, error)
-	GetUser(username, password string) (entities.User, error)
+	CreateUser(up entities.UserCreate) (int, error)
+	GetUser(username, password string) (entities.UserGet, error)
 	GetUserId(username, password string) (int, error)
 }
 
 type Authors interface {
 	CreateAuthor(author entities.AuthorCreate) (int, error)
-	GetAuthors() ([]entities.AuthorUpdate, error)
-	GetAuthorById(id int) (entities.AuthorUpdate, error)
+	GetAuthors() ([]entities.AuthorGet, error)
+	GetAuthorById(id int) (entities.AuthorGet, error)
 	UpdateAuthorById(id int, author entities.AuthorUpdate) error
 	DeleteAuthorById(id int) error
 }
 
 type Genres interface {
-	CreateGenre(genre entities.GenreCreate) (int, error)
-	GetGenres() ([]entities.GenreCreate, error)
-	GetGenreById(id int) (entities.GenreCreate, error)
+	CreateGenre(genre entities.GenreCreateAndGet) (int, error)
+	GetGenres() ([]entities.GenreCreateAndGet, error)
+	GetGenreById(id int) (entities.GenreCreateAndGet, error)
 	UpdateGenreById(id int, genre entities.GenreUpdate) error
 	DeleteGenreById(id int) error
 }
 
 type Books interface {
 	CreateBook(book entities.BookCreate) (int, error)
-	GetBooks() ([]entities.BookUpdate, error)
-	GetBookById(id int) (entities.BookUpdate, error)
+	GetBooks() ([]entities.BookGet, error)
+	GetBookById(id int) (entities.BookGet, error)
 	UpdateBookById(id int, book entities.BookUpdate) error
 	DeleteBookById(id int) error
 }
@@ -55,4 +59,31 @@ func NewRepository(db *sqlx.DB) *Repository {
 		Authors:       NewAuthorDB(db),
 		Genres:        NewGenreDB(db),
 		Books:         NewBookDB(db)}
+}
+
+func Exists(db *sqlx.DB, table, column string, value interface{}) bool {
+	var exist bool
+	query := fmt.Sprintf("SELECT EXISTS(SELECT 1 FROM %s WHERE %s = $1)", table, column)
+	if err := db.QueryRow(query, value).Scan(&exist); err != nil {
+		return false
+	}
+	return exist
+}
+
+func getUpdateArgs(entity interface{}) (string, []interface{}, error) {
+	v := reflect.ValueOf(entity)
+	if v.NumField() == 0 {
+		return "", nil, errors.New("empty update entity")
+	}
+	fields := make([]string, 0)
+	values := make([]interface{}, 0)
+	n := 1
+	for i := 0; i < v.NumField(); i++ {
+		if !v.Field(i).IsNil() {
+			fields = append(fields, fmt.Sprintf("%s = $%d", v.Type().Field(i).Name, n))
+			values = append(values, v.Field(i).Interface())
+			n++
+		}
+	}
+	return strings.Join(fields, ", "), values, nil
 }

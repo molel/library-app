@@ -29,7 +29,7 @@ func NewAuthService(repository *repository.Repository) *AuthService {
 	return &AuthService{repository: repository}
 }
 
-func (as *AuthService) CreateUser(user entities.UserSignUp) (int, error) {
+func (as *AuthService) CreateUser(user entities.UserCreate) (int, error) {
 	user.Password = Hash(user.Password)
 	return as.repository.Authorization.CreateUser(user)
 }

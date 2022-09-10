@@ -15,7 +15,7 @@ func NewAuthDB(db *sqlx.DB) *AuthDB {
 	return &AuthDB{db}
 }
 
-func (db *AuthDB) CreateUser(user entities.UserSignUp) (int, error) {
+func (db *AuthDB) CreateUser(user entities.UserCreate) (int, error) {
 	var userId int
 	query := fmt.Sprintf("INSERT INTO %s(username, password) VALUES($1, $2) RETURNING user_id AS userId", usersTableName)
 	if err := db.QueryRow(query, user.Username, user.Password).Scan(&userId); err != nil {
@@ -25,7 +25,7 @@ func (db *AuthDB) CreateUser(user entities.UserSignUp) (int, error) {
 }
 
 func (db *AuthDB) GetUserId(username, password string) (int, error) {
-	if exist := db.Exist(username); exist {
+	if exist := Exists(db.DB, usersTableName, "username", username); exist {
 		var userId int
 		query := fmt.Sprintf("SELECT user_id FROM %s WHERE username = $1 AND password = $2;", usersTableName)
 		err := db.QueryRow(query, username, password).Scan(&userId)
@@ -35,8 +35,8 @@ func (db *AuthDB) GetUserId(username, password string) (int, error) {
 	}
 }
 
-func (db *AuthDB) GetUser(username, password string) (entities.User, error) {
-	var user entities.User
+func (db *AuthDB) GetUser(username, password string) (entities.UserGet, error) {
+	var user entities.UserGet
 	query := fmt.Sprintf("SELECT * FROM %s WHERE username = $1 AND password = $2;", usersTableName)
 	err := db.Get(&user, query, username, password)
 	return user, err

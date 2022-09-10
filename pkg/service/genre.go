@@ -13,15 +13,15 @@ func NewGenreService(repository *repository.Repository) *GenreService {
 	return &GenreService{repository: repository}
 }
 
-func (gs *GenreService) CreateGenre(genre entities.GenreCreate) (int, error) {
+func (gs *GenreService) CreateGenre(genre entities.GenreCreateAndGet) (int, error) {
 	return gs.repository.Genres.CreateGenre(genre)
 }
 
-func (gs *GenreService) GetGenres() ([]entities.GenreCreate, error) {
+func (gs *GenreService) GetGenres() ([]entities.GenreCreateAndGet, error) {
 	return gs.repository.Genres.GetGenres()
 }
 
-func (gs *GenreService) GetGenreById(id int) (entities.GenreCreate, error) {
+func (gs *GenreService) GetGenreById(id int) (entities.GenreCreateAndGet, error) {
 	return gs.repository.Genres.GetGenreById(id)
 }
 

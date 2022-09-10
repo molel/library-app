@@ -7,7 +7,7 @@ import (
 )
 
 func (h *Handler) SignUp(ctx *gin.Context) {
-	var inputJSON entities.UserSignUp
+	var inputJSON entities.UserCreate
 	if err := ctx.BindJSON(&inputJSON); err != nil {
 		ErrorResponse(ctx, http.StatusBadRequest, err)
 		return
@@ -21,7 +21,7 @@ func (h *Handler) SignUp(ctx *gin.Context) {
 }
 
 func (h *Handler) SignIn(ctx *gin.Context) {
-	var inputJSON entities.UserSignUp
+	var inputJSON entities.UserCreate
 	if err := ctx.BindJSON(&inputJSON); err != nil {
 		ErrorResponse(ctx, http.StatusBadRequest, err)
 		return

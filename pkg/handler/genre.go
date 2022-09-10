@@ -8,7 +8,7 @@ import (
 )
 
 func (h *Handler) createGenre(ctx *gin.Context) {
-	var inputJSON entities.GenreCreate
+	var inputJSON entities.GenreCreateAndGet
 	if err := ctx.BindJSON(&inputJSON); err != nil {
 		ErrorResponse(ctx, http.StatusBadRequest, err)
 		return

@@ -17,11 +17,11 @@ func (bs *BookService) CreateBook(book entities.BookCreate) (int, error) {
 	return bs.repository.Books.CreateBook(book)
 }
 
-func (bs *BookService) GetBooks() ([]entities.BookUpdate, error) {
+func (bs *BookService) GetBooks() ([]entities.BookGet, error) {
 	return bs.repository.Books.GetBooks()
 }
 
-func (bs *BookService) GetBookById(id int) (entities.BookUpdate, error) {
+func (bs *BookService) GetBookById(id int) (entities.BookGet, error) {
 	return bs.repository.Books.GetBookById(id)
 }
 
