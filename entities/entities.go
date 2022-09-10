@@ -30,14 +30,14 @@ type UserCreate struct {
 }
 
 type UserGet struct {
-	UserId int `json:"userId"`
+	Id int `json:"id"`
 	UserCreate
 }
 
 type AuthorCreate struct {
-	Name        *string `json:"name" binding:"required"`
-	Surname     *string `json:"surname" binding:"required"`
-	Description *string `json:"description"`
+	Name        string `json:"name" binding:"required"`
+	Surname     string `json:"surname" binding:"required"`
+	Description string `json:"description"`
 }
 
 type AuthorUpdate struct {
@@ -47,15 +47,15 @@ type AuthorUpdate struct {
 }
 
 type AuthorGet struct {
-	AuthorId    int            `json:"authorId"`
+	Id          int            `json:"id"`
 	Name        string         `json:"name"`
 	Surname     string         `json:"surname"`
 	Description sql.NullString `json:"description"`
 }
 
 type GenreCreateAndGet struct {
-	GenreId int    `json:"genreId" binding:"required"`
-	Name    string `json:"name" binding:"required"`
+	Id   int    `json:"id" binding:"required"`
+	Name string `json:"name" binding:"required"`
 }
 
 type GenreUpdate struct {
@@ -77,7 +77,7 @@ type BookUpdate struct {
 }
 
 type BookGet struct {
-	BookId      int            `json:"bookId"`
+	Id          int            `json:"id"`
 	Name        string         `json:"name"`
 	Description sql.NullString `json:"description"`
 	GenreId     int            `json:"genreId"`
