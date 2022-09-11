@@ -5,6 +5,8 @@ import (
 	"log"
 )
 
+// TODO change Error answer structure to return status and string message
+
 type Error struct {
 	error
 }

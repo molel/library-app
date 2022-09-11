@@ -10,11 +10,11 @@ import (
 )
 
 const (
-	usersTableName               = "users"
-	authorsTableName             = "authors"
-	genresTableName              = "genres"
-	booksTableName               = "books"
-	usersBooksListItemsTableName = "users_books_list_items"
+	usersTableName   = "users"
+	authorsTableName = "authors"
+	genresTableName  = "genres"
+	booksTableName   = "books"
+	listsTableName   = "lists"
 )
 
 type Authorization interface {
@@ -47,11 +47,20 @@ type Books interface {
 	DeleteBookById(id int) error
 }
 
+type Lists interface {
+	CreateList(userId int, create entities.ListCreate) (int, error)
+	GetLists(userId int) ([]entities.ListGet, error)
+	GetListById(userId, id int) (entities.ListGet, error)
+	UpdateListById(userId, id int, list entities.ListUpdate) error
+	DeleteListById(userId, id int) error
+}
+
 type Repository struct {
 	Authorization
 	Authors
 	Genres
 	Books
+	Lists
 }
 
 func NewRepository(db *sqlx.DB) *Repository {
@@ -59,9 +68,11 @@ func NewRepository(db *sqlx.DB) *Repository {
 		Authorization: NewAuthDB(db),
 		Authors:       NewAuthorDB(db),
 		Genres:        NewGenreDB(db),
-		Books:         NewBookDB(db)}
+		Books:         NewBookDB(db),
+		Lists:         NewListDB(db)}
 }
 
+// Exists TODO implement variable number of columns and values support
 func Exists(db *sqlx.DB, table, column string, value interface{}) bool {
 	var exist bool
 	query := fmt.Sprintf("SELECT EXISTS(SELECT 1 FROM %s WHERE %s = $1)", table, column)

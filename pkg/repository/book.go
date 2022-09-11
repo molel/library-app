@@ -47,7 +47,7 @@ func (db *BookDB) GetBooks() ([]entities.BookGet, error) {
 
 func (db *BookDB) GetBookById(id int) (entities.BookGet, error) {
 	if exist := Exists(db.DB, booksTableName, "id", id); !exist {
-		return entities.BookGet{}, errors.New("there is no books with such id")
+		return entities.BookGet{}, errors.New("there is no book with such id")
 	}
 	var book entities.BookGet
 	query := fmt.Sprintf("SELECT id, name, description, genre_id AS genreId, author_id AS authorId FROM %s WHERE id = $1", booksTableName)
@@ -59,7 +59,7 @@ func (db *BookDB) GetBookById(id int) (entities.BookGet, error) {
 
 func (db *BookDB) UpdateBookById(id int, book entities.BookUpdate) error {
 	if exist := Exists(db.DB, booksTableName, "id", id); !exist {
-		return errors.New("there is no books with such id")
+		return errors.New("there is no book with such id")
 	}
 	fields, values, err := getUpdateArgs(book)
 	if err != nil {
@@ -73,11 +73,9 @@ func (db *BookDB) UpdateBookById(id int, book entities.BookUpdate) error {
 
 func (db *BookDB) DeleteBookById(id int) error {
 	if exist := Exists(db.DB, booksTableName, "id", id); !exist {
-		return errors.New("there is no books with such id")
+		return errors.New("there is no book with such id")
 	}
-	if exist := Exists(db.DB, usersBooksListItemsTableName, "book_id", id); exist {
-		return errors.New("cannot delete book: book has 1 or more dependencies")
-	}
+	// TODO don't forget to set list_items ON DELETE CASCADE
 	query := fmt.Sprintf("DELETE FROM %s WHERE id = $1", booksTableName)
 	_, err := db.Exec(query, id)
 	return err

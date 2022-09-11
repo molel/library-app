@@ -13,6 +13,7 @@ func NewHandler(service *service.Service) *Handler {
 	return &Handler{service: service}
 }
 
+// Init TODO refactor all update handle functions to return "ok" instead of updated entity id
 func (h *Handler) Init() *gin.Engine {
 	router := gin.New()
 	auth := router.Group("/auth")
@@ -35,7 +36,7 @@ func (h *Handler) Init() *gin.Engine {
 			genres.POST("/", h.createGenre)
 			genres.GET("/", h.getGenres)
 			genres.GET("/:id", h.getGenreById)
-			genres.PUT("/:id", h.UpdateGenreById)
+			genres.PUT("/:id", h.updateGenreById)
 			genres.DELETE("/:id", h.deleteGenreById)
 		}
 		books := api.Group("/books")
@@ -46,7 +47,14 @@ func (h *Handler) Init() *gin.Engine {
 			books.PUT("/:id", h.updateBookById)
 			books.DELETE("/:id", h.deleteBookById)
 		}
-		// TODO implement handlers for users' book list
+		lists := api.Group("/lists")
+		{
+			lists.POST("/", h.createList)
+			lists.GET("/", h.getLists)
+			lists.GET("/:id", h.getListById)
+			lists.PUT("/:id", h.updateListById)
+			lists.DELETE("/:id", h.deleteListById)
+		}
 	}
 	return router
 }

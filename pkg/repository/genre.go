@@ -47,7 +47,7 @@ func (db *GenreDB) GetGenres() ([]entities.GenreCreateAndGet, error) {
 
 func (db *GenreDB) GetGenreById(id int) (entities.GenreCreateAndGet, error) {
 	if exist := Exists(db.DB, genresTableName, "id", id); !exist {
-		return entities.GenreCreateAndGet{}, errors.New("there is no genres with such id")
+		return entities.GenreCreateAndGet{}, errors.New("there is no genre with such id")
 	}
 	var genre entities.GenreCreateAndGet
 	query := fmt.Sprintf("SELECT id AS id, name FROM %s WHERE id = $1", genresTableName)
@@ -59,7 +59,7 @@ func (db *GenreDB) GetGenreById(id int) (entities.GenreCreateAndGet, error) {
 
 func (db *GenreDB) UpdateGenreById(id int, genre entities.GenreUpdate) error {
 	if exist := Exists(db.DB, genresTableName, "id", id); !exist {
-		return errors.New("there is no genres with such id")
+		return errors.New("there is no genre with such id")
 	}
 	fields, values, err := getUpdateArgs(genre)
 	if err != nil {
@@ -74,7 +74,7 @@ func (db *GenreDB) UpdateGenreById(id int, genre entities.GenreUpdate) error {
 
 func (db *GenreDB) DeleteGenreById(id int) error {
 	if exist := Exists(db.DB, genresTableName, "id", id); !exist {
-		return errors.New("there is no genres with such id")
+		return errors.New("there is no genre with such id")
 	}
 	if exist := Exists(db.DB, booksTableName, "genre_id", id); exist {
 		return errors.New("cannot delete genre: genre has 1 or more dependencies")

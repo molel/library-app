@@ -31,5 +31,17 @@ func (h *Handler) UserIdentification(ctx *gin.Context) {
 		ErrorResponse(ctx, http.StatusUnauthorized, err)
 		return
 	}
-	ctx.Set("userId", userId)
+	ctx.Set("user_id", userId)
+}
+
+func GetUserId(ctx *gin.Context) (int, error) {
+	id, exists := ctx.Get("user_id")
+	if !exists {
+		return -1, errors.New("there is no such user")
+	}
+	intId, ok := id.(int)
+	if !ok {
+		return -1, errors.New("incorrect type of user id")
+	}
+	return intId, nil
 }

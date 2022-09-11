@@ -26,7 +26,7 @@ func (db *AuthDB) CreateUser(user entities.UserCreate) (int, error) {
 
 func (db *AuthDB) GetUserId(username, password string) (int, error) {
 	if exist := Exists(db.DB, usersTableName, "username", username); !exist {
-		return -1, errors.New("there is no users with such username")
+		return -1, errors.New("there is no user with such username")
 	}
 	var id int
 	query := fmt.Sprintf("SELECT id FROM %s WHERE username = $1 AND password = $2;", usersTableName)

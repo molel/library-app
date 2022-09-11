@@ -15,8 +15,7 @@ main
 ### Built With
 
 The project uses **Gin Web Framework**, **PostgreSQL Server**, **pq** as postgres driver, **sqlx** as an extension of
-sql package from golang standard library, **jwt-go** as golang implementation of JSON Web Tokens, **GoDotEnv** and **
-Viper**
+sql package from golang standard library, **jwt-go** as golang implementation of JSON Web Tokens, **GoDotEnv** and **Viper**
 
 ### Setting up Dev
 

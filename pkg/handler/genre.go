@@ -44,7 +44,7 @@ func (h *Handler) getGenreById(ctx *gin.Context) {
 	ctx.JSON(http.StatusOK, genre)
 }
 
-func (h *Handler) UpdateGenreById(ctx *gin.Context) {
+func (h *Handler) updateGenreById(ctx *gin.Context) {
 	var inputJSON entities.GenreUpdate
 	if err := ctx.BindJSON(&inputJSON); err != nil {
 		ErrorResponse(ctx, http.StatusBadRequest, err)
