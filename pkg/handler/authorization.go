@@ -17,7 +17,7 @@ func (h *Handler) SignUp(ctx *gin.Context) {
 		ErrorResponse(ctx, http.StatusInternalServerError, err)
 		return
 	}
-	ctx.JSON(http.StatusOK, map[string]interface{}{"userId": userId})
+	ctx.JSON(http.StatusOK, map[string]interface{}{"id": userId})
 }
 
 func (h *Handler) SignIn(ctx *gin.Context) {

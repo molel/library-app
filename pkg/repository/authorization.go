@@ -25,7 +25,7 @@ func (db *AuthDB) CreateUser(user entities.UserCreate) (int, error) {
 }
 
 func (db *AuthDB) GetUserId(username, password string) (int, error) {
-	if exist := Exists(db.DB, usersTableName, "username", username); !exist {
+	if exist := Exists(db.DB, usersTableName, []string{"username"}, []interface{}{username}); !exist {
 		return -1, errors.New("there is no user with such username")
 	}
 	var id int

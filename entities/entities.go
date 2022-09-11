@@ -84,8 +84,7 @@ type BookGet struct {
 }
 
 type ListCreate struct {
-	UserId int    `json:"userId"`
-	Title  string `json:"title"`
+	Title string `json:"title" binding:"required"`
 }
 
 type ListUpdate struct {
@@ -96,4 +95,18 @@ type ListGet struct {
 	Id     int    `json:"id"`
 	UserId int    `json:"userId"`
 	Title  string `json:"title"`
+}
+
+type ListItemCreate struct {
+	BookId int    `json:"bookId" binding:"required"`
+	Status string `json:"status" binding:"required"`
+}
+
+type ListItemGet struct {
+	BookId int    `json:"bookId"`
+	Status string `json:"status"`
+}
+
+type ListItemUpdate struct {
+	Status *string `json:"status"`
 }

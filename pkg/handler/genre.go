@@ -18,7 +18,7 @@ func (h *Handler) createGenre(ctx *gin.Context) {
 		ErrorResponse(ctx, http.StatusInternalServerError, err)
 		return
 	}
-	ctx.JSON(http.StatusOK, map[string]interface{}{"genreId": genreId})
+	ctx.JSON(http.StatusOK, map[string]interface{}{"id": genreId})
 }
 
 func (h *Handler) getGenres(ctx *gin.Context) {
@@ -31,7 +31,7 @@ func (h *Handler) getGenres(ctx *gin.Context) {
 }
 
 func (h *Handler) getGenreById(ctx *gin.Context) {
-	intId, err := strconv.Atoi(ctx.Param("id"))
+	intId, err := strconv.Atoi(ctx.Param("genre"))
 	if err != nil {
 		ErrorResponse(ctx, http.StatusBadRequest, err)
 		return
@@ -50,7 +50,7 @@ func (h *Handler) updateGenreById(ctx *gin.Context) {
 		ErrorResponse(ctx, http.StatusBadRequest, err)
 		return
 	}
-	intId, err := strconv.Atoi(ctx.Param("id"))
+	intId, err := strconv.Atoi(ctx.Param("genre"))
 	if err != nil {
 		ErrorResponse(ctx, http.StatusInternalServerError, err)
 		return
@@ -60,11 +60,11 @@ func (h *Handler) updateGenreById(ctx *gin.Context) {
 		ErrorResponse(ctx, http.StatusInternalServerError, err)
 		return
 	}
-	ctx.JSON(http.StatusOK, map[string]interface{}{"genreId": intId})
+	ctx.Status(http.StatusOK)
 }
 
 func (h *Handler) deleteGenreById(ctx *gin.Context) {
-	intId, err := strconv.Atoi(ctx.Param("id"))
+	intId, err := strconv.Atoi(ctx.Param("genre"))
 	if err != nil {
 		ErrorResponse(ctx, http.StatusInternalServerError, err)
 		return
@@ -74,5 +74,5 @@ func (h *Handler) deleteGenreById(ctx *gin.Context) {
 		ErrorResponse(ctx, http.StatusInternalServerError, err)
 		return
 	}
-	ctx.JSON(http.StatusOK, map[string]interface{}{"genreId": intId})
+	ctx.Status(http.StatusOK)
 }

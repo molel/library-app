@@ -18,7 +18,7 @@ func NewListDB(db *sqlx.DB) *ListDB {
 func (db *ListDB) CreateList(userId int, list entities.ListCreate) (int, error) {
 	var id int
 	query := fmt.Sprintf("INSERT INTO %s(title, user_id) VALUES($1, $2) RETURNING id", listsTableName)
-	if err := db.QueryRow(query, list.Title, list.UserId).Scan(&id); err != nil {
+	if err := db.QueryRow(query, list.Title, userId).Scan(&id); err != nil {
 		return -1, err
 	}
 	return id, nil
@@ -46,7 +46,7 @@ func (db *ListDB) GetLists(userId int) ([]entities.ListGet, error) {
 }
 
 func (db *ListDB) GetListById(userId, id int) (entities.ListGet, error) {
-	if exist := Exists(db.DB, listsTableName, "id", id); !exist {
+	if exist := Exists(db.DB, listsTableName, []string{"id"}, []interface{}{id}); !exist {
 		return entities.ListGet{}, errors.New("there is no list with such id")
 	}
 	var list entities.ListGet
@@ -58,7 +58,7 @@ func (db *ListDB) GetListById(userId, id int) (entities.ListGet, error) {
 }
 
 func (db *ListDB) UpdateListById(userId, id int, list entities.ListUpdate) error {
-	if exist := Exists(db.DB, listsTableName, "id", id); !exist {
+	if exist := Exists(db.DB, listsTableName, []string{"id"}, []interface{}{id}); !exist {
 		return errors.New("there is no list with such id")
 	}
 	fields, values, err := getUpdateArgs(list)
@@ -72,7 +72,7 @@ func (db *ListDB) UpdateListById(userId, id int, list entities.ListUpdate) error
 }
 
 func (db *ListDB) DeleteListById(userId, id int) error {
-	if exist := Exists(db.DB, listsTableName, "id", id); !exist {
+	if exist := Exists(db.DB, listsTableName, []string{"id", "user_id"}, []interface{}{id, userId}); !exist {
 		return errors.New("there is no list with such id")
 	}
 	query := fmt.Sprintf("DELETE FROM %s WHERE id = $1 AND user_id = $2", listsTableName)

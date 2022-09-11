@@ -43,12 +43,19 @@ type Lists interface {
 	DeleteListById(userId, id int) error
 }
 
+type ListItems interface {
+	CreateListItem(userId, listId int, listItem entities.ListItemCreate) error
+	UpdateListItemById(userId, listId, bookId int, listItem entities.ListItemUpdate) error
+	DeleteListItemById(userId, listId, bookId int) error
+}
+
 type Service struct {
 	Authorization
 	Authors
 	Books
 	Genres
 	Lists
+	ListItems
 }
 
 func NewService(repository *repository.Repository) *Service {
@@ -57,5 +64,6 @@ func NewService(repository *repository.Repository) *Service {
 		Authors:       NewAuthorService(repository),
 		Genres:        NewGenreService(repository),
 		Books:         NewBookService(repository),
-		Lists:         NewListService(repository)}
+		Lists:         NewListService(repository),
+		ListItems:     NewListItemService(repository)}
 }

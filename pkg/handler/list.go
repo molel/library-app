@@ -46,7 +46,7 @@ func (h *Handler) getListById(ctx *gin.Context) {
 		ErrorResponse(ctx, http.StatusInternalServerError, err)
 		return
 	}
-	intId, err := strconv.Atoi(ctx.Param("id"))
+	intId, err := strconv.Atoi(ctx.Param("list"))
 	if err != nil {
 		ErrorResponse(ctx, http.StatusBadRequest, err)
 		return
@@ -70,7 +70,7 @@ func (h *Handler) updateListById(ctx *gin.Context) {
 		ErrorResponse(ctx, http.StatusInternalServerError, err)
 		return
 	}
-	intId, err := strconv.Atoi(ctx.Param("id"))
+	intId, err := strconv.Atoi(ctx.Param("list"))
 	if err != nil {
 		ErrorResponse(ctx, http.StatusBadRequest, err)
 		return
@@ -80,7 +80,7 @@ func (h *Handler) updateListById(ctx *gin.Context) {
 		ErrorResponse(ctx, http.StatusInternalServerError, err)
 		return
 	}
-	ctx.JSON(http.StatusOK, map[string]interface{}{"error": "ok"})
+	ctx.Status(http.StatusOK)
 }
 
 func (h *Handler) deleteListById(ctx *gin.Context) {
@@ -89,7 +89,7 @@ func (h *Handler) deleteListById(ctx *gin.Context) {
 		ErrorResponse(ctx, http.StatusInternalServerError, err)
 		return
 	}
-	intId, err := strconv.Atoi(ctx.Param("id"))
+	intId, err := strconv.Atoi(ctx.Param("list"))
 	if err != nil {
 		ErrorResponse(ctx, http.StatusBadRequest, err)
 		return
@@ -99,5 +99,5 @@ func (h *Handler) deleteListById(ctx *gin.Context) {
 		ErrorResponse(ctx, http.StatusInternalServerError, err)
 		return
 	}
-	ctx.JSON(http.StatusOK, map[string]interface{}{"error": "ok"})
+	ctx.Status(http.StatusOK)
 }

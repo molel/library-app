@@ -46,7 +46,7 @@ func (db *AuthorDB) GetAuthors() ([]entities.AuthorGet, error) {
 }
 
 func (db *AuthorDB) GetAuthorById(id int) (entities.AuthorGet, error) {
-	if exist := Exists(db.DB, authorsTableName, "id", id); !exist {
+	if exist := Exists(db.DB, authorsTableName, []string{"id"}, []interface{}{id}); !exist {
 		return entities.AuthorGet{}, errors.New("there is no author with such id")
 	}
 	var author entities.AuthorGet
@@ -58,7 +58,7 @@ func (db *AuthorDB) GetAuthorById(id int) (entities.AuthorGet, error) {
 }
 
 func (db *AuthorDB) UpdateAuthorById(id int, author entities.AuthorUpdate) error {
-	if exist := Exists(db.DB, authorsTableName, "id", id); !exist {
+	if exist := Exists(db.DB, authorsTableName, []string{"id"}, []interface{}{id}); !exist {
 		return errors.New("there is no author with such id")
 	}
 	fields, values, err := getUpdateArgs(author)
@@ -73,10 +73,10 @@ func (db *AuthorDB) UpdateAuthorById(id int, author entities.AuthorUpdate) error
 }
 
 func (db *AuthorDB) DeleteAuthorById(id int) error {
-	if exist := Exists(db.DB, authorsTableName, "id", id); !exist {
+	if exist := Exists(db.DB, authorsTableName, []string{"id"}, []interface{}{id}); !exist {
 		return errors.New("there is no author with such id")
 	}
-	if exist := Exists(db.DB, booksTableName, "author_id", id); exist {
+	if exist := Exists(db.DB, booksTableName, []string{"author_id"}, []interface{}{id}); exist {
 		return errors.New("cannot delete author: author has 1 or more dependencies")
 	}
 	query := fmt.Sprintf("DELETE FROM %s WHERE id = $1", authorsTableName)

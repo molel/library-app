@@ -18,7 +18,7 @@ func (h *Handler) createAuthor(ctx *gin.Context) {
 		ErrorResponse(ctx, http.StatusInternalServerError, err)
 		return
 	}
-	ctx.JSON(http.StatusOK, map[string]interface{}{"authorId": authorId})
+	ctx.JSON(http.StatusOK, map[string]interface{}{"id": authorId})
 }
 
 func (h *Handler) getAuthors(ctx *gin.Context) {
@@ -31,7 +31,7 @@ func (h *Handler) getAuthors(ctx *gin.Context) {
 }
 
 func (h *Handler) getAuthorById(ctx *gin.Context) {
-	intId, err := strconv.Atoi(ctx.Param("id"))
+	intId, err := strconv.Atoi(ctx.Param("author"))
 	if err != nil {
 		ErrorResponse(ctx, http.StatusBadRequest, err)
 		return
@@ -50,7 +50,7 @@ func (h *Handler) updateAuthorById(ctx *gin.Context) {
 		ErrorResponse(ctx, http.StatusBadRequest, err)
 		return
 	}
-	intId, err := strconv.Atoi(ctx.Param("id"))
+	intId, err := strconv.Atoi(ctx.Param("author"))
 	if err != nil {
 		ErrorResponse(ctx, http.StatusBadRequest, err)
 		return
@@ -60,11 +60,11 @@ func (h *Handler) updateAuthorById(ctx *gin.Context) {
 		ErrorResponse(ctx, http.StatusInternalServerError, err)
 		return
 	}
-	ctx.JSON(http.StatusOK, map[string]interface{}{"author_id": intId})
+	ctx.Status(http.StatusOK)
 }
 
 func (h *Handler) deleteAuthorById(ctx *gin.Context) {
-	intId, err := strconv.Atoi(ctx.Param("id"))
+	intId, err := strconv.Atoi(ctx.Param("author"))
 	if err != nil {
 		ErrorResponse(ctx, http.StatusBadRequest, err)
 		return
@@ -74,5 +74,5 @@ func (h *Handler) deleteAuthorById(ctx *gin.Context) {
 		ErrorResponse(ctx, http.StatusInternalServerError, err)
 		return
 	}
-	ctx.JSON(http.StatusOK, map[string]interface{}{"author_id": intId})
+	ctx.Status(http.StatusOK)
 }

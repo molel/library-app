@@ -18,7 +18,7 @@ func (h *Handler) createBook(ctx *gin.Context) {
 		ErrorResponse(ctx, http.StatusInternalServerError, err)
 		return
 	}
-	ctx.JSON(http.StatusOK, map[string]interface{}{"bookId": bookId})
+	ctx.JSON(http.StatusOK, map[string]interface{}{"id": bookId})
 }
 
 func (h *Handler) getBooks(ctx *gin.Context) {
@@ -31,7 +31,7 @@ func (h *Handler) getBooks(ctx *gin.Context) {
 }
 
 func (h *Handler) getBookById(ctx *gin.Context) {
-	intId, err := strconv.Atoi(ctx.Param("id"))
+	intId, err := strconv.Atoi(ctx.Param("book"))
 	if err != nil {
 		ErrorResponse(ctx, http.StatusBadRequest, err)
 		return
@@ -50,7 +50,7 @@ func (h *Handler) updateBookById(ctx *gin.Context) {
 		ErrorResponse(ctx, http.StatusBadRequest, err)
 		return
 	}
-	intId, err := strconv.Atoi(ctx.Param("id"))
+	intId, err := strconv.Atoi(ctx.Param("book"))
 	if err != nil {
 		ErrorResponse(ctx, http.StatusBadRequest, err)
 		return
@@ -60,11 +60,11 @@ func (h *Handler) updateBookById(ctx *gin.Context) {
 		ErrorResponse(ctx, http.StatusInternalServerError, err)
 		return
 	}
-	ctx.JSON(http.StatusOK, map[string]interface{}{"book_id": intId})
+	ctx.Status(http.StatusOK)
 }
 
 func (h *Handler) deleteBookById(ctx *gin.Context) {
-	intId, err := strconv.Atoi(ctx.Param("id"))
+	intId, err := strconv.Atoi(ctx.Param("book"))
 	if err != nil {
 		ErrorResponse(ctx, http.StatusBadRequest, err)
 		return
@@ -74,5 +74,5 @@ func (h *Handler) deleteBookById(ctx *gin.Context) {
 		ErrorResponse(ctx, http.StatusInternalServerError, err)
 		return
 	}
-	ctx.JSON(http.StatusOK, map[string]interface{}{"book_id": intId})
+	ctx.Status(http.StatusOK)
 }

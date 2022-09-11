@@ -46,7 +46,7 @@ func (db *BookDB) GetBooks() ([]entities.BookGet, error) {
 }
 
 func (db *BookDB) GetBookById(id int) (entities.BookGet, error) {
-	if exist := Exists(db.DB, booksTableName, "id", id); !exist {
+	if exist := Exists(db.DB, booksTableName, []string{"id"}, []interface{}{id}); !exist {
 		return entities.BookGet{}, errors.New("there is no book with such id")
 	}
 	var book entities.BookGet
@@ -58,7 +58,7 @@ func (db *BookDB) GetBookById(id int) (entities.BookGet, error) {
 }
 
 func (db *BookDB) UpdateBookById(id int, book entities.BookUpdate) error {
-	if exist := Exists(db.DB, booksTableName, "id", id); !exist {
+	if exist := Exists(db.DB, booksTableName, []string{"id"}, []interface{}{id}); !exist {
 		return errors.New("there is no book with such id")
 	}
 	fields, values, err := getUpdateArgs(book)
@@ -72,7 +72,7 @@ func (db *BookDB) UpdateBookById(id int, book entities.BookUpdate) error {
 }
 
 func (db *BookDB) DeleteBookById(id int) error {
-	if exist := Exists(db.DB, booksTableName, "id", id); !exist {
+	if exist := Exists(db.DB, booksTableName, []string{"id"}, []interface{}{id}); !exist {
 		return errors.New("there is no book with such id")
 	}
 	// TODO don't forget to set list_items ON DELETE CASCADE

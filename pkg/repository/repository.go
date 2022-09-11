@@ -10,11 +10,12 @@ import (
 )
 
 const (
-	usersTableName   = "users"
-	authorsTableName = "authors"
-	genresTableName  = "genres"
-	booksTableName   = "books"
-	listsTableName   = "lists"
+	usersTableName     = "users"
+	authorsTableName   = "authors"
+	genresTableName    = "genres"
+	booksTableName     = "books"
+	listsTableName     = "lists"
+	listItemsTableName = "list_items"
 )
 
 type Authorization interface {
@@ -55,12 +56,19 @@ type Lists interface {
 	DeleteListById(userId, id int) error
 }
 
+type ListItems interface {
+	CreateListItem(userId, listId int, listItem entities.ListItemCreate) error
+	UpdateListItemById(userId, listId, bookId int, listItem entities.ListItemUpdate) error
+	DeleteListItemById(userId, listId, bookId int) error
+}
+
 type Repository struct {
 	Authorization
 	Authors
 	Genres
 	Books
 	Lists
+	ListItems
 }
 
 func NewRepository(db *sqlx.DB) *Repository {
@@ -69,14 +77,18 @@ func NewRepository(db *sqlx.DB) *Repository {
 		Authors:       NewAuthorDB(db),
 		Genres:        NewGenreDB(db),
 		Books:         NewBookDB(db),
-		Lists:         NewListDB(db)}
+		Lists:         NewListDB(db),
+		ListItems:     NewListItemDB(db)}
 }
 
-// Exists TODO implement variable number of columns and values support
-func Exists(db *sqlx.DB, table, column string, value interface{}) bool {
+func Exists(db *sqlx.DB, table string, columns []string, values []interface{}) bool {
 	var exist bool
-	query := fmt.Sprintf("SELECT EXISTS(SELECT 1 FROM %s WHERE %s = $1)", table, column)
-	if err := db.QueryRow(query, value).Scan(&exist); err != nil {
+	args := make([]string, 0)
+	for i := 0; i < len(columns); i++ {
+		args = append(args, fmt.Sprintf("%s = $%d", columns[i], i+1))
+	}
+	query := fmt.Sprintf("SELECT EXISTS(SELECT 1 FROM %s WHERE %s)", table, strings.Join(args, " AND "))
+	if err := db.QueryRow(query, values...).Scan(&exist); err != nil {
 		return false
 	}
 	return exist
