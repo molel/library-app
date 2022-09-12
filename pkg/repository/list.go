@@ -45,20 +45,36 @@ func (db *ListDB) GetLists(userId int) ([]entities.ListGet, error) {
 	return lists, nil
 }
 
-func (db *ListDB) GetListById(userId, id int) (entities.ListGet, error) {
-	if exist := Exists(db.DB, listsTableName, []string{"id"}, []interface{}{id}); !exist {
-		return entities.ListGet{}, errors.New("there is no list with such id")
+func (db *ListDB) GetListById(userId, id int) (entities.ListGetWithItems, error) {
+	if exist := Exists(db.DB, listsTableName, []string{"id", "user_id"}, []interface{}{id, userId}); !exist {
+		return entities.ListGetWithItems{}, errors.New("there is no list with such id")
 	}
-	var list entities.ListGet
+	var list entities.ListGetWithItems
 	query := fmt.Sprintf("SELECT id, title, user_id AS userId FROM %s WHERE id = $1 AND user_id = $2", listsTableName)
-	if err := db.Get(&list, query, id, userId); err != nil {
-		return entities.ListGet{}, err
+	if err := db.QueryRowx(query, id, userId).Scan(&list.Id, &list.Title, &list.UserId); err != nil {
+		return entities.ListGetWithItems{}, err
+	}
+	var item entities.ListItemGet
+	query = fmt.Sprintf("SELECT book_id AS bookId, status FROM %s WHERE list_id = $1", listItemsTableName)
+	rows, err := db.Queryx(query, id)
+	if err != nil {
+		return entities.ListGetWithItems{}, err
+	}
+	for rows.Next() {
+		err := rows.StructScan(&item)
+		if err != nil {
+			return entities.ListGetWithItems{}, err
+		}
+		list.Items = append(list.Items, item)
+	}
+	if err := rows.Close(); err != nil {
+		return entities.ListGetWithItems{}, err
 	}
 	return list, nil
 }
 
 func (db *ListDB) UpdateListById(userId, id int, list entities.ListUpdate) error {
-	if exist := Exists(db.DB, listsTableName, []string{"id"}, []interface{}{id}); !exist {
+	if exist := Exists(db.DB, listsTableName, []string{"id", "user_id"}, []interface{}{id, userId}); !exist {
 		return errors.New("there is no list with such id")
 	}
 	fields, values, err := getUpdateArgs(list)

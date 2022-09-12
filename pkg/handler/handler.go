@@ -50,7 +50,6 @@ func (h *Handler) Init() *gin.Engine {
 		{
 			lists.POST("/", h.createList)
 			lists.GET("/", h.getLists)
-			//TODO getListById must return list itself and its items
 			lists.GET("/:list", h.getListById)
 			lists.PUT("/:list", h.updateListById)
 			lists.DELETE("/:list", h.deleteListById)

@@ -38,7 +38,7 @@ type Books interface {
 type Lists interface {
 	CreateList(userId int, create entities.ListCreate) (int, error)
 	GetLists(userId int) ([]entities.ListGet, error)
-	GetListById(userId, id int) (entities.ListGet, error)
+	GetListById(userId, id int) (entities.ListGetWithItems, error)
 	UpdateListById(userId, id int, list entities.ListUpdate) error
 	DeleteListById(userId, id int) error
 }

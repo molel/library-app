@@ -97,6 +97,13 @@ type ListGet struct {
 	Title  string `json:"title"`
 }
 
+type ListGetWithItems struct {
+	Id     int           `json:"id"`
+	UserId int           `json:"userId"`
+	Title  string        `json:"title"`
+	Items  []ListItemGet `json:"items"`
+}
+
 type ListItemCreate struct {
 	BookId int    `json:"bookId" binding:"required"`
 	Status string `json:"status" binding:"required"`

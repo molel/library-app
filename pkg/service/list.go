@@ -21,7 +21,7 @@ func (ls *ListService) GetLists(userId int) ([]entities.ListGet, error) {
 	return ls.repository.Lists.GetLists(userId)
 }
 
-func (ls *ListService) GetListById(userId, id int) (entities.ListGet, error) {
+func (ls *ListService) GetListById(userId, id int) (entities.ListGetWithItems, error) {
 	return ls.repository.Lists.GetListById(userId, id)
 }
 
