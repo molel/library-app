@@ -1,0 +1,742 @@
+basePath: /
+definitions:
+  entities.AuthorCreate:
+    properties:
+      description:
+        type: string
+      name:
+        type: string
+      surname:
+        type: string
+    required:
+    - name
+    - surname
+    type: object
+  entities.AuthorGet:
+    properties:
+      description:
+        type: string
+      id:
+        type: integer
+      name:
+        type: string
+      surname:
+        type: string
+    type: object
+  entities.AuthorUpdate:
+    properties:
+      description:
+        type: string
+      name:
+        type: string
+      surname:
+        type: string
+    type: object
+  entities.Authors:
+    properties:
+      data:
+        items:
+          $ref: '#/definitions/entities.AuthorGet'
+        type: array
+    type: object
+  entities.BookCreate:
+    properties:
+      authorId:
+        type: integer
+      description:
+        type: string
+      genreId:
+        type: integer
+      name:
+        type: string
+    required:
+    - authorId
+    - genreId
+    - name
+    type: object
+  entities.BookGet:
+    properties:
+      authorId:
+        type: integer
+      description:
+        type: string
+      genreId:
+        type: integer
+      id:
+        type: integer
+      name:
+        type: string
+    type: object
+  entities.BookUpdate:
+    properties:
+      authorId:
+        type: integer
+      description:
+        type: string
+      genreId:
+        type: integer
+      name:
+        type: string
+    type: object
+  entities.Books:
+    properties:
+      data:
+        items:
+          $ref: '#/definitions/entities.BookGet'
+        type: array
+    type: object
+  entities.GenreCreateAndGet:
+    properties:
+      id:
+        type: integer
+      name:
+        type: string
+    required:
+    - id
+    - name
+    type: object
+  entities.Genres:
+    properties:
+      data:
+        items:
+          $ref: '#/definitions/entities.GenreCreateAndGet'
+        type: array
+    type: object
+  entities.ListCreate:
+    properties:
+      title:
+        type: string
+    required:
+    - title
+    type: object
+  entities.ListGet:
+    properties:
+      id:
+        type: integer
+      title:
+        type: string
+      userId:
+        type: integer
+    type: object
+  entities.ListGetWithItems:
+    properties:
+      id:
+        type: integer
+      items:
+        items:
+          $ref: '#/definitions/entities.ListItemGet'
+        type: array
+      title:
+        type: string
+      userId:
+        type: integer
+    type: object
+  entities.ListItemCreate:
+    properties:
+      bookId:
+        type: integer
+      status:
+        type: string
+    required:
+    - bookId
+    - status
+    type: object
+  entities.ListItemGet:
+    properties:
+      bookId:
+        type: integer
+      status:
+        type: string
+    type: object
+  entities.ListItemUpdate:
+    properties:
+      status:
+        type: string
+    type: object
+  entities.ListUpdate:
+    properties:
+      title:
+        type: string
+    type: object
+  entities.Lists:
+    properties:
+      data:
+        items:
+          $ref: '#/definitions/entities.ListGet'
+        type: array
+    type: object
+  entities.UserCreate:
+    properties:
+      password:
+        type: string
+      username:
+        type: string
+    required:
+    - password
+    - username
+    type: object
+  handler.ResponseStruct:
+    properties:
+      message:
+        type: string
+      status:
+        type: string
+    type: object
+host: localhost:8000
+info:
+  contact: {}
+  description: RESTful API service for library management system
+  title: Library app API
+  version: "1.0"
+paths:
+  /api/authors:
+    get:
+      description: Get all the authors in the system
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: authors data
+          schema:
+            $ref: '#/definitions/entities.Authors'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/handler.ResponseStruct'
+      security:
+      - ApiKeyAuth: []
+      summary: Get authors
+      tags:
+      - Authors
+    post:
+      consumes:
+      - application/json
+      description: Create new author in the system
+      parameters:
+      - description: new author info
+        in: body
+        name: input
+        required: true
+        schema:
+          $ref: '#/definitions/entities.AuthorCreate'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: new author id
+          schema:
+            type: string
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/handler.ResponseStruct'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/handler.ResponseStruct'
+      security:
+      - ApiKeyAuth: []
+      summary: Create author
+      tags:
+      - Authors
+  /api/authors/:author:
+    delete:
+      description: Delete author by id in the system
+      responses:
+        "200":
+          description: OK
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/handler.ResponseStruct'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/handler.ResponseStruct'
+      security:
+      - ApiKeyAuth: []
+      summary: Delete author
+      tags:
+      - Authors
+    get:
+      description: Get the author by id in the system
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: author data
+          schema:
+            $ref: '#/definitions/entities.AuthorGet'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/handler.ResponseStruct'
+      security:
+      - ApiKeyAuth: []
+      summary: Get author
+      tags:
+      - Authors
+    put:
+      consumes:
+      - application/json
+      description: Update author data by id in the system
+      parameters:
+      - description: new author data
+        in: body
+        name: input
+        required: true
+        schema:
+          $ref: '#/definitions/entities.AuthorUpdate'
+      responses:
+        "200":
+          description: OK
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/handler.ResponseStruct'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/handler.ResponseStruct'
+      security:
+      - ApiKeyAuth: []
+      summary: Update author
+      tags:
+      - Authors
+  /api/books:
+    get:
+      description: Get all the books in the system
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: books data
+          schema:
+            $ref: '#/definitions/entities.Books'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/handler.ResponseStruct'
+      security:
+      - ApiKeyAuth: []
+      summary: Get books
+      tags:
+      - Books
+    post:
+      consumes:
+      - application/json
+      description: Create new book in the system
+      parameters:
+      - description: new book info
+        in: body
+        name: input
+        required: true
+        schema:
+          $ref: '#/definitions/entities.BookCreate'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: new book id
+          schema:
+            type: string
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/handler.ResponseStruct'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/handler.ResponseStruct'
+      security:
+      - ApiKeyAuth: []
+      summary: Create book
+      tags:
+      - Books
+  /api/books/:book:
+    delete:
+      description: Delete book by id in the system
+      responses:
+        "200":
+          description: OK
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/handler.ResponseStruct'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/handler.ResponseStruct'
+      security:
+      - ApiKeyAuth: []
+      summary: Delete book
+      tags:
+      - Books
+    get:
+      description: Get the book by id in the system
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: book data
+          schema:
+            $ref: '#/definitions/entities.BookGet'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/handler.ResponseStruct'
+      security:
+      - ApiKeyAuth: []
+      summary: Get book
+      tags:
+      - Books
+    put:
+      consumes:
+      - application/json
+      description: Update book data by id in the system
+      parameters:
+      - description: new genre data
+        in: body
+        name: input
+        required: true
+        schema:
+          $ref: '#/definitions/entities.BookUpdate'
+      responses:
+        "200":
+          description: OK
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/handler.ResponseStruct'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/handler.ResponseStruct'
+      security:
+      - ApiKeyAuth: []
+      summary: Update book
+      tags:
+      - Books
+  /api/genres:
+    get:
+      description: Get all the genres in the system
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: genres data
+          schema:
+            $ref: '#/definitions/entities.Genres'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/handler.ResponseStruct'
+      security:
+      - ApiKeyAuth: []
+      summary: Get genres
+      tags:
+      - Genres
+    post:
+      consumes:
+      - application/json
+      description: Create new genre in the system
+      parameters:
+      - description: new genre info
+        in: body
+        name: input
+        required: true
+        schema:
+          $ref: '#/definitions/entities.GenreCreateAndGet'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: new genre id
+          schema:
+            type: string
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/handler.ResponseStruct'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/handler.ResponseStruct'
+      security:
+      - ApiKeyAuth: []
+      summary: Create genre
+      tags:
+      - Genres
+  /api/genres/:genre:
+    get:
+      description: Get the genre by id in the system
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: genre data
+          schema:
+            $ref: '#/definitions/entities.GenreCreateAndGet'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/handler.ResponseStruct'
+      security:
+      - ApiKeyAuth: []
+      summary: Get genre
+      tags:
+      - Genres
+  /api/lists:
+    get:
+      description: Get all the users' book lists in the system
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: users' book lists data
+          schema:
+            $ref: '#/definitions/entities.Lists'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/handler.ResponseStruct'
+      security:
+      - ApiKeyAuth: []
+      summary: Get user's book lists
+      tags:
+      - Lists
+    post:
+      consumes:
+      - application/json
+      description: Create new user's book list in the system
+      parameters:
+      - description: new user's book list info
+        in: body
+        name: input
+        required: true
+        schema:
+          $ref: '#/definitions/entities.ListCreate'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: new user's book list id
+          schema:
+            type: string
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/handler.ResponseStruct'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/handler.ResponseStruct'
+      security:
+      - ApiKeyAuth: []
+      summary: Create user's book list
+      tags:
+      - Lists
+  /api/lists/:list:
+    delete:
+      description: Delete user's book list by id in the system
+      responses:
+        "200":
+          description: OK
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/handler.ResponseStruct'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/handler.ResponseStruct'
+      security:
+      - ApiKeyAuth: []
+      summary: Delete user's book list
+      tags:
+      - Lists
+    get:
+      description: Get the user's book list by id in the system
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: user's book list data
+          schema:
+            $ref: '#/definitions/entities.ListGetWithItems'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/handler.ResponseStruct'
+      security:
+      - ApiKeyAuth: []
+      summary: Get user's book list
+      tags:
+      - Lists
+    put:
+      consumes:
+      - application/json
+      description: Update user's book list data by id in the system
+      parameters:
+      - description: new user's book list data
+        in: body
+        name: input
+        required: true
+        schema:
+          $ref: '#/definitions/entities.ListUpdate'
+      responses:
+        "200":
+          description: OK
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/handler.ResponseStruct'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/handler.ResponseStruct'
+      security:
+      - ApiKeyAuth: []
+      summary: Update user's book list
+      tags:
+      - Lists
+  /api/lists/:list/items:
+    post:
+      consumes:
+      - application/json
+      description: Create new list item in the system
+      parameters:
+      - description: new list item info
+        in: body
+        name: input
+        required: true
+        schema:
+          $ref: '#/definitions/entities.ListItemCreate'
+      responses:
+        "200":
+          description: OK
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/handler.ResponseStruct'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/handler.ResponseStruct'
+      security:
+      - ApiKeyAuth: []
+      summary: Create list item
+      tags:
+      - Items
+  /api/lists/:list/items/:book:
+    delete:
+      description: Delete list item by id in the system
+      responses:
+        "200":
+          description: OK
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/handler.ResponseStruct'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/handler.ResponseStruct'
+      security:
+      - ApiKeyAuth: []
+      summary: Delete list item
+      tags:
+      - Items
+    put:
+      consumes:
+      - application/json
+      description: Update list item data by id in the system
+      parameters:
+      - description: new genre data
+        in: body
+        name: input
+        required: true
+        schema:
+          $ref: '#/definitions/entities.ListItemUpdate'
+      responses:
+        "200":
+          description: OK
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/handler.ResponseStruct'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/handler.ResponseStruct'
+      security:
+      - ApiKeyAuth: []
+      summary: Update list item
+      tags:
+      - Items
+  /auth/sign-in:
+    post:
+      consumes:
+      - application/json
+      description: Auth user in the system to get token
+      parameters:
+      - description: user info
+        in: body
+        name: input
+        required: true
+        schema:
+          $ref: '#/definitions/entities.UserCreate'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: token
+          schema:
+            type: string
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/handler.ResponseStruct'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/handler.ResponseStruct'
+      summary: Sign in
+      tags:
+      - Auth
+  /auth/sign-up:
+    post:
+      consumes:
+      - application/json
+      description: Create new user in the system
+      parameters:
+      - description: new user info
+        in: body
+        name: input
+        required: true
+        schema:
+          $ref: '#/definitions/entities.UserCreate'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: new user id
+          schema:
+            type: string
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/handler.ResponseStruct'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/handler.ResponseStruct'
+      summary: Sign up
+      tags:
+      - Auth
+securityDefinitions:
+  ApiKeyAuth:
+    in: header
+    name: Authorization
+    type: apiKey
+swagger: "2.0"

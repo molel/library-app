@@ -1,6 +1,6 @@
 # HTTP server configurations
 server:
-  port: 9000
+  port: 8080
   readTimeout: 10
   writeTimeout: 10
   maxHeaderKilobytes: 1024

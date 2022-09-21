@@ -24,23 +24,23 @@ func (db *BookDB) CreateBook(book entities.BookCreate) (int, error) {
 	return id, nil
 }
 
-func (db *BookDB) GetBooks() ([]entities.BookGet, error) {
+func (db *BookDB) GetBooks() (entities.Books, error) {
 	var book entities.BookGet
-	books := make([]entities.BookGet, 0)
+	books := entities.Books{Data: make([]entities.BookGet, 0)}
 	query := fmt.Sprintf("SELECT id, name, description, genre_id AS genreId, author_id AS authorId FROM %s", booksTableName)
 	rows, err := db.Queryx(query)
 	if err != nil {
-		return nil, err
+		return entities.Books{}, err
 	}
 	for rows.Next() {
 		err := rows.StructScan(&book)
 		if err != nil {
-			return nil, err
+			return entities.Books{}, err
 		}
-		books = append(books, book)
+		books.Data = append(books.Data, book)
 	}
 	if err := rows.Close(); err != nil {
-		return nil, err
+		return entities.Books{}, err
 	}
 	return books, nil
 }

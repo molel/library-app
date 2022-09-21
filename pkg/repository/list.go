@@ -24,23 +24,23 @@ func (db *ListDB) CreateList(userId int, list entities.ListCreate) (int, error) 
 	return id, nil
 }
 
-func (db *ListDB) GetLists(userId int) ([]entities.ListGet, error) {
+func (db *ListDB) GetLists(userId int) (entities.Lists, error) {
 	var list entities.ListGet
-	lists := make([]entities.ListGet, 0)
+	lists := entities.Lists{Data: make([]entities.ListGet, 0)}
 	query := fmt.Sprintf("SELECT id, title, user_id AS userId FROM %s", listsTableName)
 	rows, err := db.Queryx(query)
 	if err != nil {
-		return nil, err
+		return entities.Lists{}, err
 	}
 	for rows.Next() {
 		err := rows.StructScan(&list)
 		if err != nil {
-			return nil, err
+			return entities.Lists{}, err
 		}
-		lists = append(lists, list)
+		lists.Data = append(lists.Data, list)
 	}
 	if err := rows.Close(); err != nil {
-		return nil, err
+		return entities.Lists{}, err
 	}
 	return lists, nil
 }

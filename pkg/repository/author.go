@@ -24,23 +24,23 @@ func (db *AuthorDB) CreateAuthor(author entities.AuthorCreate) (int, error) {
 	return id, nil
 }
 
-func (db *AuthorDB) GetAuthors() ([]entities.AuthorGet, error) {
+func (db *AuthorDB) GetAuthors() (entities.Authors, error) {
 	var author entities.AuthorGet
-	authors := make([]entities.AuthorGet, 0)
+	authors := entities.Authors{Data: make([]entities.AuthorGet, 0)}
 	query := fmt.Sprintf("SELECT id, name, surname, description FROM %s", authorsTableName)
 	rows, err := db.Queryx(query)
 	if err != nil {
-		return nil, err
+		return entities.Authors{}, err
 	}
 	for rows.Next() {
 		err := rows.StructScan(&author)
 		if err != nil {
-			return nil, err
+			return entities.Authors{}, err
 		}
-		authors = append(authors, author)
+		authors.Data = append(authors.Data, author)
 	}
 	if err := rows.Close(); err != nil {
-		return nil, err
+		return entities.Authors{}, err
 	}
 	return authors, nil
 }

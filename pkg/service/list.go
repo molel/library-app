@@ -17,7 +17,7 @@ func (ls *ListService) CreateList(userId int, list entities.ListCreate) (int, er
 	return ls.repository.Lists.CreateList(userId, list)
 }
 
-func (ls *ListService) GetLists(userId int) ([]entities.ListGet, error) {
+func (ls *ListService) GetLists(userId int) (entities.Lists, error) {
 	return ls.repository.Lists.GetLists(userId)
 }
 

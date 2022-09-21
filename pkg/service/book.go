@@ -17,7 +17,7 @@ func (bs *BookService) CreateBook(book entities.BookCreate) (int, error) {
 	return bs.repository.Books.CreateBook(book)
 }
 
-func (bs *BookService) GetBooks() ([]entities.BookGet, error) {
+func (bs *BookService) GetBooks() (entities.Books, error) {
 	return bs.repository.Books.GetBooks()
 }
 

@@ -24,23 +24,23 @@ func (db *GenreDB) CreateGenre(genre entities.GenreCreateAndGet) (int, error) {
 	return id, nil
 }
 
-func (db *GenreDB) GetGenres() ([]entities.GenreCreateAndGet, error) {
+func (db *GenreDB) GetGenres() (entities.Genres, error) {
 	var genre entities.GenreCreateAndGet
-	genres := make([]entities.GenreCreateAndGet, 0)
+	genres := entities.Genres{Data: make([]entities.GenreCreateAndGet, 0)}
 	query := fmt.Sprintf("SELECT id, name FROM %s", genresTableName)
 	rows, err := db.Queryx(query)
 	if err != nil {
-		return nil, err
+		return entities.Genres{}, err
 	}
 	for rows.Next() {
 		err := rows.StructScan(&genre)
 		if err != nil {
-			return nil, err
+			return entities.Genres{}, err
 		}
-		genres = append(genres, genre)
+		genres.Data = append(genres.Data, genre)
 	}
 	if err := rows.Close(); err != nil {
-		return nil, err
+		return entities.Genres{}, err
 	}
 	return genres, nil
 }

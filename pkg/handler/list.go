@@ -7,6 +7,18 @@ import (
 	"strconv"
 )
 
+// createList godoc
+// @Summary Create user's book list
+// @Description Create new user's book list in the system
+// @Security ApiKeyAuth
+// @Tags Lists
+// @Accept json
+// @Produce json
+// @Param input body entities.ListCreate true "new user's book list info"
+// @Success 200 {object} string "new user's book list id"
+// @Failure 400 {object} ResponseStruct
+// @Failure 500 {object} ResponseStruct
+// @Router /api/lists [post]
 func (h *Handler) createList(ctx *gin.Context) {
 	var inputJSON entities.ListCreate
 	if err := ctx.BindJSON(&inputJSON); err != nil {
@@ -26,6 +38,15 @@ func (h *Handler) createList(ctx *gin.Context) {
 	ctx.JSON(http.StatusOK, map[string]interface{}{"id": listId})
 }
 
+// getLists godoc
+// @Summary Get user's book lists
+// @Description Get all the users' book lists in the system
+// @Security ApiKeyAuth
+// @Tags Lists
+// @Produce json
+// @Success 200 {object} entities.Lists "users' book lists data"
+// @Failure 500 {object} ResponseStruct
+// @Router /api/lists [get]
 func (h *Handler) getLists(ctx *gin.Context) {
 	userId, err := GetUserId(ctx)
 	if err != nil {
@@ -40,6 +61,15 @@ func (h *Handler) getLists(ctx *gin.Context) {
 	ctx.JSON(http.StatusOK, lists)
 }
 
+// getListById godoc
+// @Summary Get user's book list
+// @Description Get the user's book list by id in the system
+// @Security ApiKeyAuth
+// @Tags Lists
+// @Produce json
+// @Success 200 {object} entities.ListGetWithItems "user's book list data"
+// @Failure 500 {object} ResponseStruct
+// @Router /api/lists/:list [get]
 func (h *Handler) getListById(ctx *gin.Context) {
 	userId, err := GetUserId(ctx)
 	if err != nil {
@@ -59,6 +89,17 @@ func (h *Handler) getListById(ctx *gin.Context) {
 	ctx.JSON(http.StatusOK, list)
 }
 
+// updateListById godoc
+// @Summary Update user's book list
+// @Description Update user's book list data by id in the system
+// @Security ApiKeyAuth
+// @Tags Lists
+// @Accept json
+// @Param input body entities.ListUpdate true "new user's book list data"
+// @Success 200
+// @Failure 400 {object} ResponseStruct
+// @Failure 500 {object} ResponseStruct
+// @Router /api/lists/:list [put]
 func (h *Handler) updateListById(ctx *gin.Context) {
 	var inputJSON entities.ListUpdate
 	if err := ctx.BindJSON(&inputJSON); err != nil {
@@ -83,6 +124,15 @@ func (h *Handler) updateListById(ctx *gin.Context) {
 	ctx.Status(http.StatusOK)
 }
 
+// deleteListById godoc
+// @Summary Delete user's book list
+// @Description Delete user's book list by id in the system
+// @Security ApiKeyAuth
+// @Tags Lists
+// @Success 200
+// @Failure 400 {object} ResponseStruct
+// @Failure 500 {object} ResponseStruct
+// @Router /api/lists/:list [delete]
 func (h *Handler) deleteListById(ctx *gin.Context) {
 	userId, err := GetUserId(ctx)
 	if err != nil {

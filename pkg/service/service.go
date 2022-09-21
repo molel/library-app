@@ -13,7 +13,7 @@ type Authorization interface {
 
 type Authors interface {
 	CreateAuthor(author entities.AuthorCreate) (int, error)
-	GetAuthors() ([]entities.AuthorGet, error)
+	GetAuthors() (entities.Authors, error)
 	GetAuthorById(id int) (entities.AuthorGet, error)
 	UpdateAuthorById(id int, author entities.AuthorUpdate) error
 	DeleteAuthorById(id int) error
@@ -21,7 +21,7 @@ type Authors interface {
 
 type Genres interface {
 	CreateGenre(genre entities.GenreCreateAndGet) (int, error)
-	GetGenres() ([]entities.GenreCreateAndGet, error)
+	GetGenres() (entities.Genres, error)
 	GetGenreById(id int) (entities.GenreCreateAndGet, error)
 	UpdateGenreById(id int, genre entities.GenreUpdate) error
 	DeleteGenreById(id int) error
@@ -29,7 +29,7 @@ type Genres interface {
 
 type Books interface {
 	CreateBook(book entities.BookCreate) (int, error)
-	GetBooks() ([]entities.BookGet, error)
+	GetBooks() (entities.Books, error)
 	GetBookById(id int) (entities.BookGet, error)
 	UpdateBookById(id int, book entities.BookUpdate) error
 	DeleteBookById(id int) error
@@ -37,7 +37,7 @@ type Books interface {
 
 type Lists interface {
 	CreateList(userId int, create entities.ListCreate) (int, error)
-	GetLists(userId int) ([]entities.ListGet, error)
+	GetLists(userId int) (entities.Lists, error)
 	GetListById(userId, id int) (entities.ListGetWithItems, error)
 	UpdateListById(userId, id int, list entities.ListUpdate) error
 	DeleteListById(userId, id int) error

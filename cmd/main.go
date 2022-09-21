@@ -1,8 +1,6 @@
 package main
 
 import (
-	"github.com/joho/godotenv"
-	"github.com/spf13/viper"
 	server "library-app"
 	"library-app/config"
 	"library-app/entities"
@@ -12,7 +10,21 @@ import (
 	"log"
 	"os"
 	"time"
+
+	"github.com/joho/godotenv"
+	"github.com/spf13/viper"
 )
+
+// @title Library app API
+// @version 1.0
+// @description RESTful API service for library management system
+
+// @host localhost:8000
+// @BasePath /
+
+// @securityDefinitions.apikey ApiKeyAuth
+// @in header
+// @name Authorization
 
 func main() {
 	if err := config.InitConfigs(); err != nil {
@@ -41,7 +53,7 @@ func main() {
 	handlers := handler.NewHandler(services)
 
 	httpServerConfigs := &entities.HTTPServerConfigs{
-		Addr:           ":" + viper.GetString("server.port"),
+		Addr:           "localhost:" + viper.GetString("server.port"),
 		Handler:        handlers.Init(),
 		ReadTimeout:    time.Duration(viper.GetInt("server.readTimeout")) * time.Second,
 		WriteTimeout:   time.Duration(viper.GetInt("server.writeTimeout")) * time.Second,

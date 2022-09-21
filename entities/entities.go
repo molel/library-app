@@ -1,7 +1,6 @@
 package entities
 
 import (
-	"database/sql"
 	"net/http"
 	"time"
 )
@@ -46,15 +45,23 @@ type AuthorUpdate struct {
 }
 
 type AuthorGet struct {
-	Id          int            `json:"id"`
-	Name        string         `json:"name"`
-	Surname     string         `json:"surname"`
-	Description sql.NullString `json:"description"`
+	Id          int    `json:"id"`
+	Name        string `json:"name"`
+	Surname     string `json:"surname"`
+	Description string `json:"description"`
+}
+
+type Authors struct {
+	Data []AuthorGet
 }
 
 type GenreCreateAndGet struct {
 	Id   int    `json:"id" binding:"required"`
 	Name string `json:"name" binding:"required"`
+}
+
+type Genres struct {
+	Data []GenreCreateAndGet
 }
 
 type GenreUpdate struct {
@@ -76,11 +83,15 @@ type BookUpdate struct {
 }
 
 type BookGet struct {
-	Id          int            `json:"id"`
-	Name        string         `json:"name"`
-	Description sql.NullString `json:"description"`
-	GenreId     int            `json:"genreId"`
-	AuthorId    int            `json:"authorId"`
+	Id          int    `json:"id"`
+	Name        string `json:"name"`
+	Description string `json:"description"`
+	GenreId     int    `json:"genreId"`
+	AuthorId    int    `json:"authorId"`
+}
+
+type Books struct {
+	Data []BookGet
 }
 
 type ListCreate struct {
@@ -102,6 +113,10 @@ type ListGetWithItems struct {
 	UserId int           `json:"userId"`
 	Title  string        `json:"title"`
 	Items  []ListItemGet `json:"items"`
+}
+
+type Lists struct {
+	Data []ListGet
 }
 
 type ListItemCreate struct {

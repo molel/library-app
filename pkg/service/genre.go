@@ -17,7 +17,7 @@ func (gs *GenreService) CreateGenre(genre entities.GenreCreateAndGet) (int, erro
 	return gs.repository.Genres.CreateGenre(genre)
 }
 
-func (gs *GenreService) GetGenres() ([]entities.GenreCreateAndGet, error) {
+func (gs *GenreService) GetGenres() (entities.Genres, error) {
 	return gs.repository.Genres.GetGenres()
 }
 

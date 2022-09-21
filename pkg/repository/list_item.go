@@ -32,8 +32,8 @@ func (db *ListItemDB) UpdateListItemById(userId, listId, bookId int, listItem en
 	if err != nil {
 		return err
 	}
-	values = append(values, listId)
-	query := fmt.Sprintf("UPDATE %s SET %s WHERE list_id = $%d", listItemsTableName, fields, len(values))
+	values = append(values, listId, bookId)
+	query := fmt.Sprintf("UPDATE %s SET %s WHERE list_id = $%d AND book_id = $%d", listItemsTableName, fields, len(values)-1, len(values))
 	_, err = db.Exec(query, values...)
 	return err
 }

@@ -17,7 +17,7 @@ func (as *AuthorService) CreateAuthor(author entities.AuthorCreate) (int, error)
 	return as.repository.CreateAuthor(author)
 }
 
-func (as *AuthorService) GetAuthors() ([]entities.AuthorGet, error) {
+func (as *AuthorService) GetAuthors() (entities.Authors, error) {
 	return as.repository.GetAuthors()
 }
 
