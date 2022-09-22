@@ -7,8 +7,8 @@ server:
 
 # PostgreSQL database configurations
 db:
-  host: localhost
+  host: pgdb
   port: 5432
   user: postgres
-  name: library-app
+  name: postgres
   sslMode: disable

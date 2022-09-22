@@ -1,0 +1,33 @@
+version: '3.8'
+
+services:
+  library-app:
+    container_name: library-app
+    build: ./
+    command: ./app
+    restart: on-failure
+    ports:
+      - "9000:8080"
+    depends_on:
+      - pgdb
+    networks:
+      - app-network
+
+  pgdb:
+    container_name: pgdb
+    image: postgres:latest
+    restart: always
+    environment:
+      - POSTGRES_DB=postgres
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=qwerty123
+    ports:
+      - "5432:5432"
+    volumes:
+      - ./data:/var/lib/postgresql/data
+    networks:
+      - app-network
+
+networks:
+  app-network:
+    driver: bridge

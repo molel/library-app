@@ -53,7 +53,7 @@ func main() {
 	handlers := handler.NewHandler(services)
 
 	httpServerConfigs := &entities.HTTPServerConfigs{
-		Addr:           "localhost:" + viper.GetString("server.port"),
+		Addr:           ":" + viper.GetString("server.port"),
 		Handler:        handlers.Init(),
 		ReadTimeout:    time.Duration(viper.GetInt("server.readTimeout")) * time.Second,
 		WriteTimeout:   time.Duration(viper.GetInt("server.writeTimeout")) * time.Second,

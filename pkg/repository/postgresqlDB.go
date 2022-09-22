@@ -2,10 +2,11 @@ package repository
 
 import (
 	"fmt"
-	"github.com/jmoiron/sqlx"
-	_ "github.com/lib/pq"
 	"library-app/entities"
 	"log"
+
+	"github.com/jmoiron/sqlx"
+	_ "github.com/lib/pq"
 )
 
 func NewPostgresqlDB(configs entities.DatabaseConfigs) *sqlx.DB {
@@ -14,6 +15,9 @@ func NewPostgresqlDB(configs entities.DatabaseConfigs) *sqlx.DB {
 			configs.Host, configs.Port, configs.User, configs.Name, configs.Password, configs.SSLMode))
 	if err != nil {
 		log.Fatalf("error occurred while connecting to database: %s\n", err.Error())
+	}
+	if err := db.Ping(); err != nil {
+		log.Fatalf("error occurred while pinging the database: %s\n", err.Error())
 	}
 	return db
 }
