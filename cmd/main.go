@@ -9,6 +9,7 @@ import (
 	"library-app/pkg/service"
 	"log"
 	"os"
+	"strings"
 	"time"
 
 	"github.com/joho/godotenv"
@@ -27,6 +28,15 @@ import (
 // @name Authorization
 
 func main() {
+	logFile, err := os.OpenFile("./logs/logs.txt", os.O_RDWR|os.O_CREATE|os.O_APPEND, 0666)
+	if err != nil {
+		log.Fatalf("error occured while opening log file: %s\n", err.Error())
+	}
+	defer logFile.Close()
+
+	log.SetOutput(logFile)
+	log.SetPrefix(strings.Repeat("-", 100) + "\n")
+
 	if err := config.InitConfigs(); err != nil {
 		log.Fatalf("error occured while reading in configs: %s\n", err.Error())
 	}

@@ -22,6 +22,11 @@ type DatabaseConfigs struct {
 	SSLMode  string
 }
 
+type ResponseStruct struct {
+	Status  string `json:"status"`
+	Message string `json:"message"`
+}
+
 type UserCreate struct {
 	Username string `json:"username" binding:"required"`
 	Password string `json:"password" binding:"required"`
@@ -52,7 +57,7 @@ type AuthorGet struct {
 }
 
 type Authors struct {
-	Data []AuthorGet
+	Data []AuthorGet `json:"data"`
 }
 
 type GenreCreateAndGet struct {
@@ -61,7 +66,7 @@ type GenreCreateAndGet struct {
 }
 
 type Genres struct {
-	Data []GenreCreateAndGet
+	Data []GenreCreateAndGet `json:"data"`
 }
 
 type GenreUpdate struct {
@@ -91,7 +96,7 @@ type BookGet struct {
 }
 
 type Books struct {
-	Data []BookGet
+	Data []BookGet `json:"data"`
 }
 
 type ListCreate struct {
@@ -116,7 +121,7 @@ type ListGetWithItems struct {
 }
 
 type Lists struct {
-	Data []ListGet
+	Data []ListGet `json:"data"`
 }
 
 type ListItemCreate struct {

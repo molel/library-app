@@ -10,6 +10,8 @@ services:
       - "9000:8080"
     depends_on:
       - pgdb
+    volumes:
+      - ./logs:/app/logs
     networks:
       - app-network
 
